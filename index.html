@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>text me — 문자를 보내면 사진이 도착해요</title>
+  <meta name="description" content="문자를 보내면 타로의 셀카가 답장으로 와요! 100장 도감을 모아보세요." />
+  <meta name="theme-color" content="#0b0716" />
+
+  <!-- Open Graph / X(Twitter) preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="text me — 문자를 보내면 사진이 도착해요" />
+  <meta property="og:description" content="문자를 보내면 타로의 셀카가 답장으로 와요! 100장 도감, 다 모을 수 있을까?" />
+  <meta property="og:image" content="assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="text me — 문자를 보내면 사진이 도착해요" />
+  <meta name="twitter:description" content="문자를 보내면 타로의 셀카가 답장으로 와요! 100장 도감에 도전." />
+  <meta name="twitter:image" content="assets/og-image.png" />
+
+  <link rel="apple-touch-icon" href="assets/og-image.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ============ SPLASH ============ -->
+    <section id="splash" class="screen active">
+      <div class="main-wrap">
+        <img class="main-bg" src="assets/mainbg.png" alt="text me" />
+        <button class="start-btn" id="startBtn" aria-label="Start"></button>
+        <div class="credit">@fitohec</div>
+      </div>
+    </section>
+
+    <!-- ============ CHAT ============ -->
+    <section id="chat" class="screen">
+      <div class="nav">
+        <span></span>
+        <div class="center">
+          <div class="avatar" id="navAvatar">🔮</div>
+          <div class="name">타로짱😏 <span class="chev">›</span></div>
+        </div>
+        <button class="icon-btn" id="openDex" aria-label="도감">
+          📁<span class="dex-badge" id="dexBadge" hidden>0</span>
+        </button>
+      </div>
+      <div class="messages" id="messages"></div>
+      <div class="composer">
+        <div class="field">
+          <textarea id="input" rows="1" placeholder="문자 보내기" maxlength="1000"></textarea>
+        </div>
+        <button class="send" id="sendBtn" disabled aria-label="보내기"></button>
+      </div>
+    </section>
+
+    <!-- ============ DEX ============ -->
+    <section id="dex">
+      <div class="dex-nav">
+        <div class="title">도감 <small id="dexSub">모은 사진을 모아봐요</small></div>
+        <button id="closeDex">닫기</button>
+      </div>
+      <div class="dex-progress">
+        <div class="bar"><div class="fill" id="dexFill"></div></div>
+        <div class="label"><span id="dexCount">0 / 100</span><span id="dexPct">0%</span></div>
+      </div>
+      <div class="dex-grid" id="dexGrid"></div>
+      <div class="credit dex-credit">@fitohec</div>
+    </section>
+
+    <!-- ============ PHOTO VIEWER ============ -->
+    <div id="viewer">
+      <button class="close" id="viewerClose">✕</button>
+      <img class="photo" id="viewerImg" alt="" />
+      <div class="v-title" id="viewerTitle"></div>
+      <div class="v-kw" id="viewerKw"></div>
+      <div class="v-actions">
+        <button id="shareBtn"><span class="ico">⇪</span>공유</button>
+        <button id="xShareBtn"><span class="ico">𝕏</span>X 공유</button>
+        <button id="downloadBtn"><span class="ico">⤓</span>저장</button>
+      </div>
+    </div>
+
+    <!-- ============ POPUP OVERLAY ============ -->
+    <div class="overlay" id="overlay">
+      <div class="card" id="overlayCard"></div>
+    </div>
+
+    <canvas id="confetti"></canvas>
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script>
+    // ── 설정 스위치 ──────────────────────────────────────────────
+    // 실제 사진(images/001.jpg …)을 다 넣은 뒤 true 로 바꾸세요.
+    // false 인 동안은 네트워크 요청 없이 타로 플레이스홀더가 보입니다.
+    window.CONFIG = {
+      useRealImages: true,    // 실제 사진 사용(js/photos.js 매핑)
+      imageExt: "jpg",        // photos.js 에 없을 때의 폴백 확장자
+      avatar: "images/profile.jpeg",  // 상대방 프로필 사진
+      shareUrl: "",           // 배포 후 고정 URL(비우면 현재 주소 사용)
+
+      // 효과음. offset=파일 재생 시작 지점(초), maxDur=최대 길이(초, 뒤 잘라내기).
+      useCustomSounds: true,
+      sounds: {
+        // 타이핑: TickTock 방식 그대로 — 키 종류별로 다른 소리.
+        //   click=일반 글자 / delete=백스페이스 / modifier=space·return·shift
+        // 각 값이 null 이면 키 종류별로 다른 "합성 클릭"이 남.
+        // 실제 iOS 사운드를 쓰려면 sounds/ 에 파일 넣고 경로 문자열로 바꾸세요.
+        //   예) click: "sounds/key_press_click"
+        keyboard: {
+          click:    { src: "sounds/key_press_click",    offset: 1.0, maxDur: 0.35 },
+          delete:   { src: "sounds/key_press_delete",   offset: 2.0, maxDur: 0.35 },
+          modifier: { src: "sounds/key_press_modifier", offset: 2.0, maxDur: 0.35 }
+        },
+        send:    { src: "sounds/send",    offset: 2.0, maxDur: 1.6 },
+        receive: { src: "sounds/receive", offset: 1.0, maxDur: 1.6 }
+      },
+
+      // 길이 보상: 글자수가 min 이상이면 "내용과 무관하게" 그 id 사진이 나옴.
+      // (가장 큰 min 우선 / 키워드보다 우선) — 장문 이스터에그.
+      lengthRules: [
+        { min: 100, id: "048" },
+        { min: 200, id: "049" },
+        { min: 500, id: "050" }
+      ],
+
+      // 특별 답장(최우선): 문자에 match 단어가 포함되면 사진 대신 아래 메시지들이
+      // 순서대로 답장으로 옴. match 는 대소문자·공백 무시. youtube 는 탭하면 재생.
+      specialReplies: [
+        {
+          match: ["text me", "텍스트미"],
+          messages: [
+            { type: "text", text: "가사가 좋아서 ..." },
+            { type: "text", text: "브리즈 상상하면서 했어 ㅋㅋ" },
+            { type: "youtube", videoId: "7oea97f6uHs" }
+          ]
+        }
+      ]
+    };
+  </script>
+  <script src="js/manifest.js"></script>
+  <script src="js/photos.js"></script>
+  <script src="js/mapping.js"></script>
+  <script src="js/placeholder.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/confetti.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
