@@ -67,15 +67,14 @@ body {
   padding: 0; overflow: hidden; background: var(--navy);
   align-items: center; justify-content: center;
 }
-/* Whole mainbg always visible (no crop). The button is positioned by JS to
-   match the design exactly, tracking the contain-fitted image rect. */
+/* Fill the screen with the mainbg — no letterbox bars (use the image as-is). */
 #splash .main-wrap { position: absolute; inset: 0; }
-#splash .main-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
-/* START button (button1.png). left/bottom/width/height set by JS (positionStartBtn).
+#splash .main-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+/* START button: centered, width 75.8%, bottom edge 8.8% up, 314:70 — from main.png.
    Neon blue glow around the pill (drop-shadow hugs the pill shape). */
 #splash .start-btn {
   position: absolute; left: 50%; transform: translateX(-50%);
-  bottom: 8.8%; width: 75.8%; aspect-ratio: 314 / 70;
+  bottom: 8.8%; width: 75.8%; max-width: 340px; aspect-ratio: 314 / 70;
   border: 0; cursor: pointer; padding: 0; font-size: 0;
   background: url("../assets/button1.png") center / 100% 100% no-repeat;
   filter: drop-shadow(0 0 7px rgba(64,120,255,0.75)) drop-shadow(0 0 16px rgba(64,120,255,0.45));
@@ -216,6 +215,14 @@ body {
 .bubble.in.yt.playing { width: 100%; max-width: 100%; }
 .bubble.in.yt .yt-stage { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; background: #000; }
 .bubble.in.yt .yt-stage iframe { position: absolute; inset: 0; width: 100% !important; height: 100% !important; border: 0; }
+/* tap-to-hide YouTube UI: veil eats taps only in .clean (so the YT chrome auto-hides) */
+.bubble.in.yt .yt-veil { position: absolute; inset: 0; z-index: 3; background: transparent; cursor: pointer; pointer-events: none; }
+.bubble.in.yt .yt-stage.clean .yt-veil { pointer-events: auto; }
+.bubble.in.yt .yt-uitoggle {
+  position: absolute; top: 8px; right: 8px; z-index: 4; border: 0; cursor: pointer;
+  background: rgba(0,0,0,0.55); color: #fff; font-family: inherit; font-size: 11px;
+  font-weight: 700; padding: 4px 9px; border-radius: 999px; backdrop-filter: blur(2px);
+}
 /* vertical (Shorts): tall thumbnail & player, larger when playing */
 .bubble.in.yt.v { width: 200px; }
 .bubble.in.yt.v .yt-thumb { aspect-ratio: 9/16; }

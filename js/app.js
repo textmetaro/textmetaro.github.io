@@ -168,9 +168,20 @@
       stage.className = "yt-stage";
       var mount = document.createElement("div");
       stage.appendChild(mount);
+      // tap-to-hide-UI: veil captures taps in clean mode; corner button toggles
+      var veil = document.createElement("div");
+      veil.className = "yt-veil";
+      var uitog = document.createElement("button");
+      uitog.type = "button"; uitog.className = "yt-uitoggle";
+      function syncTog() { uitog.textContent = stage.classList.contains("clean") ? "UI 켜기" : "UI 끄기"; }
+      syncTog();
+      veil.addEventListener("click", function () { stage.classList.remove("clean"); syncTog(); });
+      uitog.addEventListener("click", function (e) { e.stopPropagation(); stage.classList.toggle("clean"); syncTog(); });
+      stage.appendChild(veil);
+      stage.appendChild(uitog);
       wrap.innerHTML = "";
       wrap.appendChild(stage);
-      scrollBottom();
+      scrollBottomIfNear();
 
       loadYT().then(function (YT) {
         var forceHD = function (p) { try { p.setPlaybackQuality("hd1080"); } catch (e) {} };
@@ -227,7 +238,7 @@
         var wrap = document.createElement("div");
         wrap.className = "bubble in img";
         var rimg = makeImg(entry);
-        rimg.addEventListener("load", scrollBottom); // keep view pinned to newest as photo loads
+        rimg.addEventListener("load", scrollBottomIfNear); // pin to newest only if already near bottom
         wrap.appendChild(rimg);
         if (msg.first) {                              // first-discovery → small NEW badge
           var nb = document.createElement("span");
@@ -247,6 +258,12 @@
   function scrollBottom() {
     requestAnimationFrame(function () { messagesEl.scrollTop = messagesEl.scrollHeight; });
   }
+  // true when the user is already near the bottom (so we don't yank them while
+  // they're scrolling up to read history)
+  function nearBottom() {
+    return (messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight) < 140;
+  }
+  function scrollBottomIfNear() { if (nearBottom()) scrollBottom(); }
 
   // ---- send flow ----
   function canSend() { return inputEl.value.trim().length > 0; }
@@ -587,34 +604,6 @@
   $("shareBtn").addEventListener("click", sharePhoto);
   $("xShareBtn").addEventListener("click", shareToX);
   overlay.addEventListener("click", function (e) { if (e.target === overlay) closeOverlay(); });
-
-  // ---- splash: place START button exactly over the contain-fitted mainbg ----
-  // (design: centered, width 75.8%, bottom edge 8.8% up — from main.png)
-  function positionStartBtn() {
-    var app = $("app") || document.getElementById("app");
-    var btn = $("startBtn");
-    var img = document.querySelector("#splash .main-bg");
-    if (!app || !btn || !img) return;
-    var W = app.clientWidth, H = app.clientHeight;
-    var iw = img.naturalWidth || 414, ih = img.naturalHeight || 896;
-    var scale = Math.min(W / iw, H / ih);
-    var dw = iw * scale, dh = ih * scale;
-    var left = (W - dw) / 2, top = (H - dh) / 2;
-    var bw = dw * 0.758;
-    btn.style.width = bw + "px";
-    btn.style.height = (bw * 70 / 314) + "px";
-    btn.style.left = (left + dw / 2) + "px";
-    btn.style.bottom = (top + dh * 0.088) + "px";
-  }
-  (function initSplashBtn() {
-    var img = document.querySelector("#splash .main-bg");
-    if (img) {
-      if (img.complete) positionStartBtn();
-      img.addEventListener("load", positionStartBtn);
-    }
-    window.addEventListener("resize", positionStartBtn);
-    setTimeout(positionStartBtn, 60);
-  })();
 
   // ---- contact profile photo (nav avatar) ----
   (function setAvatar() {
