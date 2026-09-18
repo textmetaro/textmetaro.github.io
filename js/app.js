@@ -12,9 +12,9 @@
   var IMG_EXT = CONFIG.imageExt || "jpg";
 
   var INTRO_TEXT =
-    "1. 원하는 내용을 작성해서 문자를 보내주세요.\n" +
+    "1. 원하는 내용을 문자로 보내주세요.\n" +
     "2. 문자 내용에 따라서 다른 타로의 셀카를 받아요.\n" +
-    "3. 도감에서 100장을 모을 수 있어요! (다 모으는 사람은 없을 것 같지만...🤔)";
+    "3. 도감에서 144장을 모을 수 있어요! (다 모으라고 만든건 아니지만...🤔)";
 
   var STORE_KEY = "textme.v1";
   var SHARE_URL = CONFIG.shareUrl || (location.origin + location.pathname); // deployed URL for X
@@ -168,20 +168,15 @@
       stage.className = "yt-stage";
       var mount = document.createElement("div");
       stage.appendChild(mount);
-      // tap-to-hide-UI: veil captures taps in clean mode; corner button toggles
+      // tap-to-hide-UI: a veil over the video (but NOT the bottom control bar).
+      // Start with UI shown; tapping the video area toggles the clean (UI-hidden) mode.
       var veil = document.createElement("div");
       veil.className = "yt-veil";
-      var uitog = document.createElement("button");
-      uitog.type = "button"; uitog.className = "yt-uitoggle";
-      function syncTog() { uitog.textContent = stage.classList.contains("clean") ? "UI 켜기" : "UI 끄기"; }
-      syncTog();
-      veil.addEventListener("click", function () { stage.classList.remove("clean"); syncTog(); });
-      uitog.addEventListener("click", function (e) { e.stopPropagation(); stage.classList.toggle("clean"); syncTog(); });
+      veil.addEventListener("click", function () { stage.classList.toggle("clean"); });
       stage.appendChild(veil);
-      stage.appendChild(uitog);
       wrap.innerHTML = "";
       wrap.appendChild(stage);
-      scrollBottomIfNear();
+      scrollBottomIfPinned();
 
       loadYT().then(function (YT) {
         var forceHD = function (p) { try { p.setPlaybackQuality("hd1080"); } catch (e) {} };
@@ -238,7 +233,7 @@
         var wrap = document.createElement("div");
         wrap.className = "bubble in img";
         var rimg = makeImg(entry);
-        rimg.addEventListener("load", scrollBottomIfNear); // pin to newest only if already near bottom
+        rimg.addEventListener("load", scrollBottomIfPinned); // pin to newest only if already near bottom
         wrap.appendChild(rimg);
         if (msg.first) {                              // first-discovery → small NEW badge
           var nb = document.createElement("span");
@@ -251,19 +246,21 @@
         messagesEl.appendChild(row);
       }
     });
-    scrollBottom();
+    scrollBottomIfPinned();
     updateBadge();
   }
 
   function scrollBottom() {
     requestAnimationFrame(function () { messagesEl.scrollTop = messagesEl.scrollHeight; });
   }
-  // true when the user is already near the bottom (so we don't yank them while
-  // they're scrolling up to read history)
-  function nearBottom() {
-    return (messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight) < 140;
-  }
-  function scrollBottomIfNear() { if (nearBottom()) scrollBottom(); }
+  // "pinned" = user is at/near the bottom. Reply photos load async and grow the
+  // list; we keep pinning to the bottom while pinned, but never yank the user if
+  // they've scrolled up to read history.
+  var pinned = true;
+  messagesEl.addEventListener("scroll", function () {
+    pinned = (messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight) < 160;
+  });
+  function scrollBottomIfPinned() { if (pinned) scrollBottom(); }
 
   // ---- send flow ----
   function canSend() { return inputEl.value.trim().length > 0; }
@@ -273,6 +270,7 @@
     var text = inputEl.value.trim();
     if (!text) return;
     Sound.send();
+    pinned = true;                    // follow to the bottom for the reply
     var now = Date.now();
     state.messages.push({ kind: "user", text: text, ts: now });
     inputEl.value = "";
@@ -295,7 +293,7 @@
 
     setTimeout(function () {
       messagesEl.appendChild(typing);
-      scrollBottom();
+      scrollBottomIfPinned();
     }, preDelay);
 
     setTimeout(function () {
@@ -349,7 +347,7 @@
       var m = queue.shift();
       var typing = makeTyping();
       messagesEl.appendChild(typing);
-      scrollBottom();
+      scrollBottomIfPinned();
       setTimeout(function () {
         typing.remove();
         if (m.type === "youtube") {
@@ -405,7 +403,7 @@
     clearNew();                 // seeing the dex clears the notification badge
     updateBadge();
   }
-  function closeDex() { dexEl.classList.remove("active"); scrollBottom(); }
+  function closeDex() { dexEl.classList.remove("active"); pinned = true; scrollBottom(); }
   function clearNew() {
     // once viewed, drop NEW markers (badge → 0)
     Object.keys(state.collected).forEach(function (id) { state.collected[id]._new = false; });
@@ -467,55 +465,17 @@
         viewerImg.src = Placeholder.dataURL(entry, 700, 1050);
       };
     }
-    $("viewerTitle").textContent = "";   // no text — photo only
-    $("viewerKw").textContent = "";
-    viewer.classList.add("active");
+    viewer.classList.add("active");   // photo only; long-press the image to save
   }
   function closeViewer() { viewer.classList.remove("active"); }
 
-  // build a Blob of the currently shown image (real photo or placeholder)
-  function currentBlob(cb) {
-    var entry = currentEntry;
-    var real = viewerImg.dataset.placeholder === "1" ? null : viewerImg;
-    var canvas = Placeholder.exportCanvas(entry, real, 900, 1350);
-    canvas.toBlob(function (blob) { cb(blob); }, "image/png");
-  }
-
-  function downloadPhoto() {
-    currentBlob(function (blob) {
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      a.href = url;
-      a.download = "textme_" + currentEntry.id + ".png";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
-      toast("사진을 저장했어요 ⤓");
-    });
-  }
-
-  function sharePhoto() {
-    currentBlob(function (blob) {
-      var file = new File([blob], "textme_" + currentEntry.id + ".png", { type: "image/png" });
-      var data = {
-        title: "text me",
-        text: SHARE_TEXT + "\n" + SHARE_URL,
-        files: [file],
-      };
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        navigator.share(data).catch(function () {});
-      } else if (navigator.share) {
-        navigator.share({ title: "text me", text: SHARE_TEXT, url: SHARE_URL }).catch(function () {});
-      } else {
-        shareToX();
-      }
-    });
-  }
-
-  function shareToX() {
+  // dex "공유하기" → open X composer with the post pre-written (n = collected count).
+  // The OG image appears via the shared URL's Open Graph card.
+  function shareDex() {
+    var n = collectedCount();
+    var text = "Hello BRIIZE 📞🧡\n타로에게 문자하고 " + n + "장의 셀카를 모았어요!";
     var url = "https://twitter.com/intent/tweet?text=" +
-      encodeURIComponent(SHARE_TEXT) + "&url=" + encodeURIComponent(SHARE_URL);
+      encodeURIComponent(text) + "&url=" + encodeURIComponent(SHARE_URL);
     window.open(url, "_blank", "noopener");
   }
 
@@ -599,10 +559,8 @@
   });
   $("openDex").addEventListener("click", openDex);
   $("closeDex").addEventListener("click", closeDex);
+  $("dexShare").addEventListener("click", shareDex);
   $("viewerClose").addEventListener("click", closeViewer);
-  $("downloadBtn").addEventListener("click", downloadPhoto);
-  $("shareBtn").addEventListener("click", sharePhoto);
-  $("xShareBtn").addEventListener("click", shareToX);
   overlay.addEventListener("click", function (e) { if (e.target === overlay) closeOverlay(); });
 
   // ---- contact profile photo (nav avatar) ----

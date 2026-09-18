@@ -46,18 +46,18 @@ body {
   display: flex; align-items: center; justify-content: center;
   min-height: 100dvh;
 }
-/* Always a mobile-width frame — even on desktop web (the design is mobile-first). */
+/* The whole app is locked to the mainbg aspect ratio (414:896 = 9:19.5), fitted
+   inside the viewport. So the main image is never cropped and never letterboxed
+   on modern phones (which are ~this ratio); on desktop it's a centered phone. */
 #app {
-  width: min(100vw, 430px);
-  height: 100dvh;
+  width: min(100vw, calc(100dvh * 414 / 896), 430px);
+  aspect-ratio: 414 / 896;
   position: relative;
   overflow: hidden;
   background: var(--bg);
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
 }
-@media (min-width: 460px) {         /* desktop: show it as a centered phone */
-  #app { height: min(100dvh, 900px); border-radius: 30px; }
-}
+@media (min-width: 460px) { #app { border-radius: 30px; } }
 
 .screen { position: absolute; inset: 0; display: none; flex-direction: column; }
 .screen.active { display: flex; }
@@ -215,14 +215,11 @@ body {
 .bubble.in.yt.playing { width: 100%; max-width: 100%; }
 .bubble.in.yt .yt-stage { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; background: #000; }
 .bubble.in.yt .yt-stage iframe { position: absolute; inset: 0; width: 100% !important; height: 100% !important; border: 0; }
-/* tap-to-hide YouTube UI: veil eats taps only in .clean (so the YT chrome auto-hides) */
-.bubble.in.yt .yt-veil { position: absolute; inset: 0; z-index: 3; background: transparent; cursor: pointer; pointer-events: none; }
-.bubble.in.yt .yt-stage.clean .yt-veil { pointer-events: auto; }
-.bubble.in.yt .yt-uitoggle {
-  position: absolute; top: 8px; right: 8px; z-index: 4; border: 0; cursor: pointer;
-  background: rgba(0,0,0,0.55); color: #fff; font-family: inherit; font-size: 11px;
-  font-weight: 700; padding: 4px 9px; border-radius: 999px; backdrop-filter: blur(2px);
-}
+/* tap-to-hide YouTube UI: veil covers the video EXCEPT the bottom control bar,
+   so tapping the video toggles clean mode while the pause/controls stay usable.
+   In clean mode the veil covers everything so the YT chrome auto-hides. */
+.bubble.in.yt .yt-veil { position: absolute; left: 0; right: 0; top: 0; bottom: 16%; z-index: 3; background: transparent; cursor: pointer; }
+.bubble.in.yt .yt-stage.clean .yt-veil { bottom: 0; }
 /* vertical (Shorts): tall thumbnail & player, larger when playing */
 .bubble.in.yt.v { width: 200px; }
 .bubble.in.yt.v .yt-thumb { aspect-ratio: 9/16; }
@@ -305,6 +302,15 @@ body {
 .dex-nav .title { font-size: 18px; font-weight: 800; }
 .dex-nav .title small { display: block; font-size: 12px; font-weight: 500; color: var(--ink-soft); margin-top: 2px; }
 .dex-nav button { background: none; border: 0; color: var(--blue-accent); font-size: 16px; font-weight: 600; cursor: pointer; }
+.dex-nav-right { display: flex; align-items: center; gap: 12px; }
+.dex-nav .dex-share {
+  background: linear-gradient(180deg, #5b86ff, #3a6bff); color: #fff;
+  font-size: 13px; font-weight: 700; padding: 7px 15px; border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(58,107,255,0.5);
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.dex-nav .dex-share::before { content: "𝕏"; font-weight: 800; }
+.dex-nav .dex-share:active { transform: scale(0.96); }
 .dex-progress { padding: 12px 16px 4px; }
 .dex-progress .bar { height: 8px; border-radius: 999px; background: rgba(255,255,255,0.12); overflow: hidden; }
 .dex-progress .fill { height: 100%; background: linear-gradient(90deg, #4f7bff, #a879ff); border-radius: 999px; transition: width .5s ease; }
@@ -347,19 +353,12 @@ body {
   align-items: center; justify-content: center; padding: 20px;
 }
 #viewer.active { display: flex; }
-#viewer .close { position: absolute; top: calc(var(--safe-t) + 14px); right: 18px; background: rgba(255,255,255,0.14); border: 0; color: #fff; width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer; }
-#viewer .photo { max-width: 100%; max-height: 62vh; border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
-#viewer .v-title { display: none; }
-#viewer .v-kw:empty { display: none; }
-#viewer .v-kw { color: var(--gold); font-size: 14px; margin: 20px 0; }
-#viewer .photo { margin-bottom: 24px; }
-#viewer .v-actions { display: flex; gap: 14px; }
-#viewer .v-actions button {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  background: none; border: 0; color: #fff; font-size: 12px; font-weight: 600; cursor: pointer;
+#viewer .close { position: absolute; top: calc(var(--safe-t) + 14px); right: 18px; z-index: 2; background: rgba(255,255,255,0.16); border: 0; color: #fff; width: 38px; height: 38px; border-radius: 50%; font-size: 18px; cursor: pointer; }
+/* just the image, big — long-press it to save on mobile */
+#viewer .photo {
+  max-width: 100%; max-height: 84vh; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  -webkit-touch-callout: default; -webkit-user-select: auto; user-select: auto; pointer-events: auto;
 }
-#viewer .v-actions .ico { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center; font-size: 22px; }
-#viewer .v-actions button:active .ico { background: rgba(255,255,255,0.28); }
 
 /* confetti canvas */
 #confetti { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 55; pointer-events: none; display: none; }
