@@ -67,14 +67,11 @@ body {
   padding: 0; overflow: hidden; background: var(--navy);
   align-items: center; justify-content: center;
 }
-/* main-wrap is locked to the design's aspect ratio so the WHOLE mainbg shows
-   (no crop) and the button lines up exactly with the design at any height. */
-#splash .main-wrap {
-  position: relative; height: 100%; max-width: 100%;
-  aspect-ratio: 414 / 896; margin: 0 auto;
-}
-#splash .main-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-/* START button: centered, width 75.8%, bottom edge 8.8% up, 314:70 — from main.png.
+/* Whole mainbg always visible (no crop). The button is positioned by JS to
+   match the design exactly, tracking the contain-fitted image rect. */
+#splash .main-wrap { position: absolute; inset: 0; }
+#splash .main-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+/* START button (button1.png). left/bottom/width/height set by JS (positionStartBtn).
    Neon blue glow around the pill (drop-shadow hugs the pill shape). */
 #splash .start-btn {
   position: absolute; left: 50%; transform: translateX(-50%);
@@ -219,6 +216,11 @@ body {
 .bubble.in.yt.playing { width: 100%; max-width: 100%; }
 .bubble.in.yt .yt-stage { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; background: #000; }
 .bubble.in.yt .yt-stage iframe { position: absolute; inset: 0; width: 100% !important; height: 100% !important; border: 0; }
+/* vertical (Shorts): tall thumbnail & player, larger when playing */
+.bubble.in.yt.v { width: 200px; }
+.bubble.in.yt.v .yt-thumb { aspect-ratio: 9/16; }
+.bubble.in.yt.v .yt-stage { aspect-ratio: 9/16; }
+.bubble.in.yt.v.playing { width: 74%; max-width: 300px; }
 .stamp { font-size: 10.5px; color: var(--gray-text); margin: 1px 6px 8px; }
 .row.out + .stamp { text-align: right; }
 .reveal-cap { font-size: 11px; color: var(--gray-text); margin: 3px 8px 2px; }
@@ -304,11 +306,16 @@ body {
 .dex-grid {
   flex: 1; overflow-y: auto; display: grid;
   grid-template-columns: repeat(3, 1fr);
-  /* fixed 2:3 row height derived from column width (aspect-ratio/percent-padding
-     are ignored by grid auto-track sizing, so we compute it explicitly) */
-  grid-auto-rows: calc((min(100vw, 480px) - 48px) / 3 * 1.5);
+  /* fixed 2:3 row height derived from column width (JS refines this at runtime) */
+  grid-auto-rows: calc((min(100vw, 430px) - 48px) / 3 * 1.5);
   gap: 8px; padding: 12px 16px calc(24px + var(--safe-b));
+  scrollbar-width: thin;                       /* Firefox: subtle, mood-matching */
+  scrollbar-color: rgba(255,255,255,0.16) transparent;
 }
+.dex-grid::-webkit-scrollbar { width: 5px; }
+.dex-grid::-webkit-scrollbar-track { background: transparent; }
+.dex-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.14); border-radius: 999px; }
+.dex-grid::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.26); }
 .cell {
   border-radius: 12px; overflow: hidden; position: relative;
   background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);

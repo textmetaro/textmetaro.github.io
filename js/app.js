@@ -140,12 +140,14 @@
   // YouTube "lite embed": clean thumbnail; tap → large in-chat player with
   // native controls + a best-effort 1080p request. A bigger player is what
   // actually makes YouTube serve HD (quality can't be forced via URL params).
-  function makeYouTube(videoId) {
+  function makeYouTube(videoId, vertical) {
     var wrap = document.createElement("div");
-    wrap.className = "bubble in yt";
+    wrap.className = "bubble in yt" + (vertical ? " v" : "");
     var thumb = document.createElement("div");
     thumb.className = "yt-thumb";
+    // vertical (Shorts) → try the original-aspect thumb, else hqdefault
     thumb.style.backgroundImage =
+      "url(https://i.ytimg.com/vi/" + videoId + (vertical ? "/oardefault.jpg" : "/hqdefault.jpg") + ")," +
       "url(https://i.ytimg.com/vi/" + videoId + "/hqdefault.jpg)";
     thumb.innerHTML = "<span class='yt-play'></span><span class='yt-badge'>▶ YouTube</span>";
     wrap.appendChild(thumb);
@@ -217,7 +219,7 @@
         row.appendChild(tb);
         messagesEl.appendChild(row);
       } else if (msg.kind === "youtube") {
-        row.appendChild(makeYouTube(msg.videoId));
+        row.appendChild(makeYouTube(msg.videoId, msg.vertical));
         messagesEl.appendChild(row);
       } else {
         var entry = byId[msg.imageId];
@@ -334,7 +336,9 @@
       setTimeout(function () {
         typing.remove();
         if (m.type === "youtube") {
-          state.messages.push({ kind: "youtube", videoId: m.videoId, ts: Date.now() });
+          var pick = m.pool ? m.pool[Math.floor(Math.random() * m.pool.length)]
+                            : { id: m.videoId, vertical: false };
+          state.messages.push({ kind: "youtube", videoId: pick.id, vertical: !!pick.vertical, ts: Date.now() });
         } else {
           state.messages.push({ kind: "rtext", text: m.text, ts: Date.now() });
         }
@@ -384,7 +388,7 @@
     clearNew();                 // seeing the dex clears the notification badge
     updateBadge();
   }
-  function closeDex() { dexEl.classList.remove("active"); }
+  function closeDex() { dexEl.classList.remove("active"); scrollBottom(); }
   function clearNew() {
     // once viewed, drop NEW markers (badge → 0)
     Object.keys(state.collected).forEach(function (id) { state.collected[id]._new = false; });
@@ -583,6 +587,34 @@
   $("shareBtn").addEventListener("click", sharePhoto);
   $("xShareBtn").addEventListener("click", shareToX);
   overlay.addEventListener("click", function (e) { if (e.target === overlay) closeOverlay(); });
+
+  // ---- splash: place START button exactly over the contain-fitted mainbg ----
+  // (design: centered, width 75.8%, bottom edge 8.8% up — from main.png)
+  function positionStartBtn() {
+    var app = $("app") || document.getElementById("app");
+    var btn = $("startBtn");
+    var img = document.querySelector("#splash .main-bg");
+    if (!app || !btn || !img) return;
+    var W = app.clientWidth, H = app.clientHeight;
+    var iw = img.naturalWidth || 414, ih = img.naturalHeight || 896;
+    var scale = Math.min(W / iw, H / ih);
+    var dw = iw * scale, dh = ih * scale;
+    var left = (W - dw) / 2, top = (H - dh) / 2;
+    var bw = dw * 0.758;
+    btn.style.width = bw + "px";
+    btn.style.height = (bw * 70 / 314) + "px";
+    btn.style.left = (left + dw / 2) + "px";
+    btn.style.bottom = (top + dh * 0.088) + "px";
+  }
+  (function initSplashBtn() {
+    var img = document.querySelector("#splash .main-bg");
+    if (img) {
+      if (img.complete) positionStartBtn();
+      img.addEventListener("load", positionStartBtn);
+    }
+    window.addEventListener("resize", positionStartBtn);
+    setTimeout(positionStartBtn, 60);
+  })();
 
   // ---- contact profile photo (nav avatar) ----
   (function setAvatar() {

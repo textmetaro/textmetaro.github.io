@@ -261,6 +261,54 @@ window.DEX = [
   {
     "id": "017",
     "title": "The Tower",
+    "emoji": "💔",
+    "hue": 259,
+    "group": "heartbreak",
+    "special": false,
+    "keywords": [
+      "울고",
+      "그만",
+      "외로워",
+      "외롭",
+      "우울",
+      "보고싶지만"
+    ]
+  },
+  {
+    "id": "018",
+    "title": "The Star",
+    "emoji": "💔",
+    "hue": 266,
+    "group": "heartbreak",
+    "special": false,
+    "keywords": [
+      "그만",
+      "외로워",
+      "외롭",
+      "우울",
+      "보고싶지만",
+      "미련"
+    ]
+  },
+  {
+    "id": "019",
+    "title": "The Moon",
+    "emoji": "💔",
+    "hue": 273,
+    "group": "heartbreak",
+    "special": false,
+    "keywords": [
+      "외로워",
+      "외롭",
+      "우울",
+      "보고싶지만",
+      "미련",
+      "이별했어"
+    ]
+  },
+  {
+    "id": "020",
+    "title": "The Sun",
     "emoji": "😆",
     "hue": 45,
     "group": "happy",
@@ -275,8 +323,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "018",
-    "title": "The Star",
+    "id": "021",
+    "title": "Judgement",
     "emoji": "😆",
     "hue": 52,
     "group": "happy",
@@ -291,8 +339,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "019",
-    "title": "The Moon",
+    "id": "022",
+    "title": "The World",
     "emoji": "😆",
     "hue": 59,
     "group": "happy",
@@ -307,8 +355,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "020",
-    "title": "The Sun",
+    "id": "023",
+    "title": "Ace of Cups",
     "emoji": "😆",
     "hue": 66,
     "group": "happy",
@@ -323,8 +371,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "021",
-    "title": "Judgement",
+    "id": "024",
+    "title": "Ace of Wands",
     "emoji": "😆",
     "hue": 73,
     "group": "happy",
@@ -339,8 +387,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "022",
-    "title": "The World",
+    "id": "025",
+    "title": "Ace of Swords",
     "emoji": "😆",
     "hue": 80,
     "group": "happy",
@@ -355,8 +403,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "023",
-    "title": "Ace of Cups",
+    "id": "026",
+    "title": "The Fool",
     "emoji": "😆",
     "hue": 87,
     "group": "happy",
@@ -371,8 +419,56 @@ window.DEX = [
     ]
   },
   {
-    "id": "024",
-    "title": "Ace of Wands",
+    "id": "027",
+    "title": "The Magician",
+    "emoji": "😆",
+    "hue": 94,
+    "group": "happy",
+    "special": false,
+    "keywords": [
+      "웃겨",
+      "즐거워",
+      "즐겁",
+      "최고",
+      "행복해",
+      "기분좋아"
+    ]
+  },
+  {
+    "id": "028",
+    "title": "The High Priestess",
+    "emoji": "😆",
+    "hue": 101,
+    "group": "happy",
+    "special": false,
+    "keywords": [
+      "즐거워",
+      "즐겁",
+      "최고",
+      "행복해",
+      "기분좋아",
+      "설렘"
+    ]
+  },
+  {
+    "id": "029",
+    "title": "The Empress",
+    "emoji": "😆",
+    "hue": 108,
+    "group": "happy",
+    "special": false,
+    "keywords": [
+      "즐겁",
+      "최고",
+      "행복해",
+      "기분좋아",
+      "설렘",
+      "행복"
+    ]
+  },
+  {
+    "id": "030",
+    "title": "The Emperor",
     "emoji": "🔥",
     "hue": 5,
     "group": "angry",
@@ -387,8 +483,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "025",
-    "title": "Ace of Swords",
+    "id": "031",
+    "title": "The Hierophant",
     "emoji": "🔥",
     "hue": 12,
     "group": "angry",
@@ -403,8 +499,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "026",
-    "title": "The Fool",
+    "id": "032",
+    "title": "The Lovers",
     "emoji": "🔥",
     "hue": 19,
     "group": "angry",
@@ -419,8 +515,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "027",
-    "title": "The Magician",
+    "id": "033",
+    "title": "The Chariot",
     "emoji": "🔥",
     "hue": 26,
     "group": "angry",
@@ -435,8 +531,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "028",
-    "title": "The High Priestess",
+    "id": "034",
+    "title": "Strength",
     "emoji": "🔥",
     "hue": 33,
     "group": "angry",
@@ -451,8 +547,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "029",
-    "title": "The Empress",
+    "id": "035",
+    "title": "The Hermit",
     "emoji": "🔥",
     "hue": 40,
     "group": "angry",
@@ -467,8 +563,56 @@ window.DEX = [
     ]
   },
   {
-    "id": "030",
-    "title": "The Emperor",
+    "id": "036",
+    "title": "Wheel of Fortune",
+    "emoji": "🔥",
+    "hue": 47,
+    "group": "angry",
+    "special": false,
+    "keywords": [
+      "빡침",
+      "싫어",
+      "미워",
+      "분노",
+      "킹받",
+      "극혐"
+    ]
+  },
+  {
+    "id": "037",
+    "title": "Justice",
+    "emoji": "🔥",
+    "hue": 54,
+    "group": "angry",
+    "special": false,
+    "keywords": [
+      "싫어",
+      "미워",
+      "분노",
+      "킹받",
+      "극혐",
+      "화나"
+    ]
+  },
+  {
+    "id": "038",
+    "title": "The Hanged Man",
+    "emoji": "🔥",
+    "hue": 61,
+    "group": "angry",
+    "special": false,
+    "keywords": [
+      "미워",
+      "분노",
+      "킹받",
+      "극혐",
+      "화나",
+      "화남"
+    ]
+  },
+  {
+    "id": "039",
+    "title": "Death",
     "emoji": "🥱",
     "hue": 260,
     "group": "tired",
@@ -483,8 +627,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "031",
-    "title": "The Hierophant",
+    "id": "040",
+    "title": "Temperance",
     "emoji": "🥱",
     "hue": 267,
     "group": "tired",
@@ -499,8 +643,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "032",
-    "title": "The Lovers",
+    "id": "041",
+    "title": "The Devil",
     "emoji": "🥱",
     "hue": 274,
     "group": "tired",
@@ -515,8 +659,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "033",
-    "title": "The Chariot",
+    "id": "042",
+    "title": "The Tower",
     "emoji": "🥱",
     "hue": 281,
     "group": "tired",
@@ -531,8 +675,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "034",
-    "title": "Strength",
+    "id": "043",
+    "title": "The Star",
     "emoji": "🥱",
     "hue": 288,
     "group": "tired",
@@ -547,8 +691,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "035",
-    "title": "The Hermit",
+    "id": "044",
+    "title": "The Moon",
     "emoji": "🥱",
     "hue": 295,
     "group": "tired",
@@ -563,8 +707,56 @@ window.DEX = [
     ]
   },
   {
-    "id": "036",
-    "title": "Wheel of Fortune",
+    "id": "045",
+    "title": "The Sun",
+    "emoji": "🥱",
+    "hue": 302,
+    "group": "tired",
+    "special": false,
+    "keywords": [
+      "힘들어",
+      "힘듦",
+      "번아웃",
+      "눕고싶",
+      "쉬고",
+      "자고싶"
+    ]
+  },
+  {
+    "id": "046",
+    "title": "Judgement",
+    "emoji": "🥱",
+    "hue": 309,
+    "group": "tired",
+    "special": false,
+    "keywords": [
+      "힘듦",
+      "번아웃",
+      "눕고싶",
+      "쉬고",
+      "자고싶",
+      "노곤"
+    ]
+  },
+  {
+    "id": "047",
+    "title": "The World",
+    "emoji": "🥱",
+    "hue": 316,
+    "group": "tired",
+    "special": false,
+    "keywords": [
+      "번아웃",
+      "눕고싶",
+      "쉬고",
+      "자고싶",
+      "노곤",
+      "피곤"
+    ]
+  },
+  {
+    "id": "048",
+    "title": "Ace of Cups",
     "emoji": "🍜",
     "hue": 30,
     "group": "food",
@@ -579,8 +771,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "037",
-    "title": "Justice",
+    "id": "049",
+    "title": "Ace of Wands",
     "emoji": "🍜",
     "hue": 37,
     "group": "food",
@@ -595,8 +787,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "038",
-    "title": "The Hanged Man",
+    "id": "050",
+    "title": "Ace of Swords",
     "emoji": "🍜",
     "hue": 44,
     "group": "food",
@@ -611,8 +803,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "039",
-    "title": "Death",
+    "id": "051",
+    "title": "The Fool",
     "emoji": "🍜",
     "hue": 51,
     "group": "food",
@@ -627,8 +819,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "040",
-    "title": "Temperance",
+    "id": "052",
+    "title": "The Magician",
     "emoji": "🍜",
     "hue": 58,
     "group": "food",
@@ -643,8 +835,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "041",
-    "title": "The Devil",
+    "id": "053",
+    "title": "The High Priestess",
     "emoji": "🍜",
     "hue": 65,
     "group": "food",
@@ -659,8 +851,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "042",
-    "title": "The Tower",
+    "id": "054",
+    "title": "The Empress",
     "emoji": "🍜",
     "hue": 72,
     "group": "food",
@@ -675,8 +867,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "043",
-    "title": "The Star",
+    "id": "055",
+    "title": "The Emperor",
     "emoji": "🍜",
     "hue": 79,
     "group": "food",
@@ -691,8 +883,72 @@ window.DEX = [
     ]
   },
   {
-    "id": "044",
-    "title": "The Moon",
+    "id": "056",
+    "title": "The Hierophant",
+    "emoji": "🍜",
+    "hue": 86,
+    "group": "food",
+    "special": false,
+    "keywords": [
+      "디저트",
+      "야식",
+      "라면",
+      "떡볶이",
+      "빵",
+      "케이크"
+    ]
+  },
+  {
+    "id": "057",
+    "title": "The Lovers",
+    "emoji": "🍜",
+    "hue": 93,
+    "group": "food",
+    "special": false,
+    "keywords": [
+      "야식",
+      "라면",
+      "떡볶이",
+      "빵",
+      "케이크",
+      "먹방"
+    ]
+  },
+  {
+    "id": "058",
+    "title": "The Chariot",
+    "emoji": "🍜",
+    "hue": 100,
+    "group": "food",
+    "special": false,
+    "keywords": [
+      "라면",
+      "떡볶이",
+      "빵",
+      "케이크",
+      "먹방",
+      "배고파"
+    ]
+  },
+  {
+    "id": "059",
+    "title": "Strength",
+    "emoji": "🍜",
+    "hue": 107,
+    "group": "food",
+    "special": false,
+    "keywords": [
+      "떡볶이",
+      "빵",
+      "케이크",
+      "먹방",
+      "배고파",
+      "배고픔"
+    ]
+  },
+  {
+    "id": "060",
+    "title": "The Hermit",
     "emoji": "🌦️",
     "hue": 200,
     "group": "weather",
@@ -707,8 +963,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "045",
-    "title": "The Sun",
+    "id": "061",
+    "title": "Wheel of Fortune",
     "emoji": "🌦️",
     "hue": 207,
     "group": "weather",
@@ -723,8 +979,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "046",
-    "title": "Judgement",
+    "id": "062",
+    "title": "Justice",
     "emoji": "🌦️",
     "hue": 214,
     "group": "weather",
@@ -739,8 +995,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "047",
-    "title": "The World",
+    "id": "063",
+    "title": "The Hanged Man",
     "emoji": "🌦️",
     "hue": 221,
     "group": "weather",
@@ -755,8 +1011,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "048",
-    "title": "Ace of Cups",
+    "id": "064",
+    "title": "Death",
     "emoji": "🌦️",
     "hue": 228,
     "group": "weather",
@@ -771,8 +1027,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "049",
-    "title": "Ace of Wands",
+    "id": "065",
+    "title": "Temperance",
     "emoji": "🌦️",
     "hue": 235,
     "group": "weather",
@@ -787,8 +1043,56 @@ window.DEX = [
     ]
   },
   {
-    "id": "050",
-    "title": "Ace of Swords",
+    "id": "066",
+    "title": "The Devil",
+    "emoji": "🌦️",
+    "hue": 242,
+    "group": "weather",
+    "special": false,
+    "keywords": [
+      "추워",
+      "날씨",
+      "비와",
+      "눈와",
+      "햇살",
+      "장마"
+    ]
+  },
+  {
+    "id": "067",
+    "title": "The Tower",
+    "emoji": "🌦️",
+    "hue": 249,
+    "group": "weather",
+    "special": false,
+    "keywords": [
+      "날씨",
+      "비와",
+      "눈와",
+      "햇살",
+      "장마",
+      "태풍"
+    ]
+  },
+  {
+    "id": "068",
+    "title": "The Star",
+    "emoji": "🌦️",
+    "hue": 256,
+    "group": "weather",
+    "special": false,
+    "keywords": [
+      "비와",
+      "눈와",
+      "햇살",
+      "장마",
+      "태풍",
+      "비"
+    ]
+  },
+  {
+    "id": "069",
+    "title": "The Moon",
     "emoji": "🌙",
     "hue": 230,
     "group": "time",
@@ -803,8 +1107,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "051",
-    "title": "The Fool",
+    "id": "070",
+    "title": "The Sun",
     "emoji": "🌙",
     "hue": 237,
     "group": "time",
@@ -819,8 +1123,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "052",
-    "title": "The Magician",
+    "id": "071",
+    "title": "Judgement",
     "emoji": "🌙",
     "hue": 244,
     "group": "time",
@@ -835,8 +1139,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "053",
-    "title": "The High Priestess",
+    "id": "072",
+    "title": "The World",
     "emoji": "🌙",
     "hue": 251,
     "group": "time",
@@ -851,8 +1155,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "054",
-    "title": "The Empress",
+    "id": "073",
+    "title": "Ace of Cups",
     "emoji": "🌙",
     "hue": 258,
     "group": "time",
@@ -867,8 +1171,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "055",
-    "title": "The Emperor",
+    "id": "074",
+    "title": "Ace of Wands",
     "emoji": "🌙",
     "hue": 265,
     "group": "time",
@@ -883,8 +1187,56 @@ window.DEX = [
     ]
   },
   {
-    "id": "056",
-    "title": "The Hierophant",
+    "id": "075",
+    "title": "Ace of Swords",
+    "emoji": "🌙",
+    "hue": 272,
+    "group": "time",
+    "special": false,
+    "keywords": [
+      "금요일",
+      "오늘",
+      "내일",
+      "시간",
+      "늦잠",
+      "불면"
+    ]
+  },
+  {
+    "id": "076",
+    "title": "The Fool",
+    "emoji": "🌙",
+    "hue": 279,
+    "group": "time",
+    "special": false,
+    "keywords": [
+      "오늘",
+      "내일",
+      "시간",
+      "늦잠",
+      "불면",
+      "야근"
+    ]
+  },
+  {
+    "id": "077",
+    "title": "The Magician",
+    "emoji": "🌙",
+    "hue": 286,
+    "group": "time",
+    "special": false,
+    "keywords": [
+      "내일",
+      "시간",
+      "늦잠",
+      "불면",
+      "야근",
+      "아침"
+    ]
+  },
+  {
+    "id": "078",
+    "title": "The High Priestess",
     "emoji": "💰",
     "hue": 135,
     "group": "money",
@@ -899,8 +1251,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "057",
-    "title": "The Lovers",
+    "id": "079",
+    "title": "The Empress",
     "emoji": "💰",
     "hue": 142,
     "group": "money",
@@ -915,8 +1267,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "058",
-    "title": "The Chariot",
+    "id": "080",
+    "title": "The Emperor",
     "emoji": "💰",
     "hue": 149,
     "group": "money",
@@ -931,8 +1283,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "059",
-    "title": "Strength",
+    "id": "081",
+    "title": "The Hierophant",
     "emoji": "💰",
     "hue": 156,
     "group": "money",
@@ -947,8 +1299,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "060",
-    "title": "The Hermit",
+    "id": "082",
+    "title": "The Lovers",
     "emoji": "💰",
     "hue": 163,
     "group": "money",
@@ -963,8 +1315,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "061",
-    "title": "Wheel of Fortune",
+    "id": "083",
+    "title": "The Chariot",
     "emoji": "💰",
     "hue": 170,
     "group": "money",
@@ -979,7 +1331,55 @@ window.DEX = [
     ]
   },
   {
-    "id": "062",
+    "id": "084",
+    "title": "Strength",
+    "emoji": "💰",
+    "hue": 177,
+    "group": "money",
+    "special": false,
+    "keywords": [
+      "플렉스",
+      "거지",
+      "텅장",
+      "부업",
+      "한탕",
+      "돈복"
+    ]
+  },
+  {
+    "id": "085",
+    "title": "The Hermit",
+    "emoji": "💰",
+    "hue": 184,
+    "group": "money",
+    "special": false,
+    "keywords": [
+      "거지",
+      "텅장",
+      "부업",
+      "한탕",
+      "돈복",
+      "돈"
+    ]
+  },
+  {
+    "id": "086",
+    "title": "Wheel of Fortune",
+    "emoji": "💰",
+    "hue": 191,
+    "group": "money",
+    "special": false,
+    "keywords": [
+      "텅장",
+      "부업",
+      "한탕",
+      "돈복",
+      "돈",
+      "부자"
+    ]
+  },
+  {
+    "id": "087",
     "title": "Wheel of Fortune",
     "emoji": "🔮",
     "hue": 280,
@@ -995,7 +1395,7 @@ window.DEX = [
     ]
   },
   {
-    "id": "063",
+    "id": "088",
     "title": "The Hanged Man",
     "emoji": "🔮",
     "hue": 287,
@@ -1011,7 +1411,7 @@ window.DEX = [
     ]
   },
   {
-    "id": "064",
+    "id": "089",
     "title": "Death",
     "emoji": "🔮",
     "hue": 294,
@@ -1027,7 +1427,7 @@ window.DEX = [
     ]
   },
   {
-    "id": "065",
+    "id": "090",
     "title": "Temperance",
     "emoji": "🔮",
     "hue": 301,
@@ -1043,7 +1443,7 @@ window.DEX = [
     ]
   },
   {
-    "id": "066",
+    "id": "091",
     "title": "The Devil",
     "emoji": "🔮",
     "hue": 308,
@@ -1059,7 +1459,7 @@ window.DEX = [
     ]
   },
   {
-    "id": "067",
+    "id": "092",
     "title": "The Tower",
     "emoji": "🔮",
     "hue": 315,
@@ -1075,8 +1475,56 @@ window.DEX = [
     ]
   },
   {
-    "id": "068",
+    "id": "093",
     "title": "The Star",
+    "emoji": "🔮",
+    "hue": 322,
+    "group": "luck",
+    "special": false,
+    "keywords": [
+      "오늘의운세",
+      "점",
+      "길",
+      "흉",
+      "징크스",
+      "라키"
+    ]
+  },
+  {
+    "id": "094",
+    "title": "The Moon",
+    "emoji": "🔮",
+    "hue": 329,
+    "group": "luck",
+    "special": false,
+    "keywords": [
+      "점",
+      "길",
+      "흉",
+      "징크스",
+      "라키",
+      "촉"
+    ]
+  },
+  {
+    "id": "095",
+    "title": "The Sun",
+    "emoji": "🔮",
+    "hue": 336,
+    "group": "luck",
+    "special": false,
+    "keywords": [
+      "길",
+      "흉",
+      "징크스",
+      "라키",
+      "촉",
+      "운"
+    ]
+  },
+  {
+    "id": "096",
+    "title": "Judgement",
     "emoji": "✨",
     "hue": 95,
     "group": "cheer",
@@ -1091,8 +1539,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "069",
-    "title": "The Moon",
+    "id": "097",
+    "title": "The World",
     "emoji": "✨",
     "hue": 102,
     "group": "cheer",
@@ -1107,8 +1555,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "070",
-    "title": "The Sun",
+    "id": "098",
+    "title": "Ace of Cups",
     "emoji": "✨",
     "hue": 109,
     "group": "cheer",
@@ -1123,8 +1571,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "071",
-    "title": "Judgement",
+    "id": "099",
+    "title": "Ace of Wands",
     "emoji": "✨",
     "hue": 116,
     "group": "cheer",
@@ -1139,8 +1587,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "072",
-    "title": "The World",
+    "id": "100",
+    "title": "Ace of Swords",
     "emoji": "✨",
     "hue": 123,
     "group": "cheer",
@@ -1155,8 +1603,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "073",
-    "title": "Ace of Cups",
+    "id": "101",
+    "title": "The Fool",
     "emoji": "✨",
     "hue": 130,
     "group": "cheer",
@@ -1171,8 +1619,56 @@ window.DEX = [
     ]
   },
   {
-    "id": "074",
-    "title": "Ace of Wands",
+    "id": "102",
+    "title": "The Magician",
+    "emoji": "✨",
+    "hue": 137,
+    "group": "cheer",
+    "special": false,
+    "keywords": [
+      "위로",
+      "괜찮아",
+      "토닥",
+      "응원해",
+      "잘될거야",
+      "힘내"
+    ]
+  },
+  {
+    "id": "103",
+    "title": "The High Priestess",
+    "emoji": "✨",
+    "hue": 144,
+    "group": "cheer",
+    "special": false,
+    "keywords": [
+      "괜찮아",
+      "토닥",
+      "응원해",
+      "잘될거야",
+      "힘내",
+      "파이팅"
+    ]
+  },
+  {
+    "id": "104",
+    "title": "The Empress",
+    "emoji": "✨",
+    "hue": 151,
+    "group": "cheer",
+    "special": false,
+    "keywords": [
+      "토닥",
+      "응원해",
+      "잘될거야",
+      "힘내",
+      "파이팅",
+      "응원"
+    ]
+  },
+  {
+    "id": "105",
+    "title": "The Emperor",
     "emoji": "🫂",
     "hue": 170,
     "group": "bond",
@@ -1187,8 +1683,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "075",
-    "title": "Ace of Swords",
+    "id": "106",
+    "title": "The Hierophant",
     "emoji": "🫂",
     "hue": 177,
     "group": "bond",
@@ -1203,8 +1699,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "076",
-    "title": "The Fool",
+    "id": "107",
+    "title": "The Lovers",
     "emoji": "🫂",
     "hue": 184,
     "group": "bond",
@@ -1219,8 +1715,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "077",
-    "title": "The Magician",
+    "id": "108",
+    "title": "The Chariot",
     "emoji": "🫂",
     "hue": 191,
     "group": "bond",
@@ -1235,8 +1731,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "078",
-    "title": "The High Priestess",
+    "id": "109",
+    "title": "Strength",
     "emoji": "🫂",
     "hue": 198,
     "group": "bond",
@@ -1251,8 +1747,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "079",
-    "title": "The Empress",
+    "id": "110",
+    "title": "The Hermit",
     "emoji": "🫂",
     "hue": 205,
     "group": "bond",
@@ -1267,8 +1763,56 @@ window.DEX = [
     ]
   },
   {
-    "id": "080",
-    "title": "The Emperor",
+    "id": "111",
+    "title": "Wheel of Fortune",
+    "emoji": "🫂",
+    "hue": 212,
+    "group": "bond",
+    "special": false,
+    "keywords": [
+      "엄마",
+      "아빠",
+      "베프",
+      "인간관계",
+      "혼밥",
+      "외톨이"
+    ]
+  },
+  {
+    "id": "112",
+    "title": "Justice",
+    "emoji": "🫂",
+    "hue": 219,
+    "group": "bond",
+    "special": false,
+    "keywords": [
+      "아빠",
+      "베프",
+      "인간관계",
+      "혼밥",
+      "외톨이",
+      "친구"
+    ]
+  },
+  {
+    "id": "113",
+    "title": "The Hanged Man",
+    "emoji": "🫂",
+    "hue": 226,
+    "group": "bond",
+    "special": false,
+    "keywords": [
+      "베프",
+      "인간관계",
+      "혼밥",
+      "외톨이",
+      "친구",
+      "가족"
+    ]
+  },
+  {
+    "id": "114",
+    "title": "Death",
     "emoji": "✈️",
     "hue": 190,
     "group": "travel",
@@ -1283,8 +1827,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "081",
-    "title": "The Hierophant",
+    "id": "115",
+    "title": "Temperance",
     "emoji": "✈️",
     "hue": 197,
     "group": "travel",
@@ -1299,8 +1843,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "082",
-    "title": "The Lovers",
+    "id": "116",
+    "title": "The Devil",
     "emoji": "✈️",
     "hue": 204,
     "group": "travel",
@@ -1315,8 +1859,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "083",
-    "title": "The Chariot",
+    "id": "117",
+    "title": "The Tower",
     "emoji": "✈️",
     "hue": 211,
     "group": "travel",
@@ -1331,8 +1875,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "084",
-    "title": "Strength",
+    "id": "118",
+    "title": "The Star",
     "emoji": "✈️",
     "hue": 218,
     "group": "travel",
@@ -1347,8 +1891,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "085",
-    "title": "The Hermit",
+    "id": "119",
+    "title": "The Moon",
     "emoji": "✈️",
     "hue": 225,
     "group": "travel",
@@ -1363,8 +1907,56 @@ window.DEX = [
     ]
   },
   {
-    "id": "086",
-    "title": "Wheel of Fortune",
+    "id": "120",
+    "title": "The Sun",
+    "emoji": "✈️",
+    "hue": 232,
+    "group": "travel",
+    "special": false,
+    "keywords": [
+      "여행가고싶",
+      "캠핑",
+      "드라이브",
+      "공항",
+      "제주",
+      "해외"
+    ]
+  },
+  {
+    "id": "121",
+    "title": "Judgement",
+    "emoji": "✈️",
+    "hue": 239,
+    "group": "travel",
+    "special": false,
+    "keywords": [
+      "캠핑",
+      "드라이브",
+      "공항",
+      "제주",
+      "해외",
+      "어디론가"
+    ]
+  },
+  {
+    "id": "122",
+    "title": "The World",
+    "emoji": "✈️",
+    "hue": 246,
+    "group": "travel",
+    "special": false,
+    "keywords": [
+      "드라이브",
+      "공항",
+      "제주",
+      "해외",
+      "어디론가",
+      "여행"
+    ]
+  },
+  {
+    "id": "123",
+    "title": "Ace of Cups",
     "emoji": "🍂",
     "hue": 110,
     "group": "season",
@@ -1379,8 +1971,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "087",
-    "title": "Justice",
+    "id": "124",
+    "title": "Ace of Wands",
     "emoji": "🍂",
     "hue": 117,
     "group": "season",
@@ -1395,8 +1987,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "088",
-    "title": "The Hanged Man",
+    "id": "125",
+    "title": "Ace of Swords",
     "emoji": "🍂",
     "hue": 124,
     "group": "season",
@@ -1411,8 +2003,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "089",
-    "title": "Death",
+    "id": "126",
+    "title": "The Fool",
     "emoji": "🍂",
     "hue": 131,
     "group": "season",
@@ -1427,8 +2019,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "090",
-    "title": "Temperance",
+    "id": "127",
+    "title": "The Magician",
     "emoji": "🍂",
     "hue": 138,
     "group": "season",
@@ -1443,8 +2035,40 @@ window.DEX = [
     ]
   },
   {
-    "id": "091",
-    "title": "The Devil",
+    "id": "128",
+    "title": "The High Priestess",
+    "emoji": "🍂",
+    "hue": 145,
+    "group": "season",
+    "special": false,
+    "keywords": [
+      "단풍",
+      "첫눈",
+      "무더위",
+      "환절기",
+      "계절",
+      "꽃"
+    ]
+  },
+  {
+    "id": "129",
+    "title": "The Empress",
+    "emoji": "🍂",
+    "hue": 152,
+    "group": "season",
+    "special": false,
+    "keywords": [
+      "첫눈",
+      "무더위",
+      "환절기",
+      "계절",
+      "꽃",
+      "봄"
+    ]
+  },
+  {
+    "id": "130",
+    "title": "The Emperor",
     "emoji": "🐱",
     "hue": 50,
     "group": "animal",
@@ -1459,8 +2083,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "092",
-    "title": "The Tower",
+    "id": "131",
+    "title": "The Hierophant",
     "emoji": "🐱",
     "hue": 57,
     "group": "animal",
@@ -1475,8 +2099,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "093",
-    "title": "The Star",
+    "id": "132",
+    "title": "The Lovers",
     "emoji": "🐱",
     "hue": 64,
     "group": "animal",
@@ -1491,8 +2115,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "094",
-    "title": "The Moon",
+    "id": "133",
+    "title": "The Chariot",
     "emoji": "🐱",
     "hue": 71,
     "group": "animal",
@@ -1507,7 +2131,39 @@ window.DEX = [
     ]
   },
   {
-    "id": "095",
+    "id": "134",
+    "title": "Strength",
+    "emoji": "🐱",
+    "hue": 78,
+    "group": "animal",
+    "special": false,
+    "keywords": [
+      "멍멍",
+      "동물",
+      "반려동물",
+      "햄스터",
+      "펭귄",
+      "고양이보고싶"
+    ]
+  },
+  {
+    "id": "135",
+    "title": "The Hermit",
+    "emoji": "🐱",
+    "hue": 85,
+    "group": "animal",
+    "special": false,
+    "keywords": [
+      "동물",
+      "반려동물",
+      "햄스터",
+      "펭귄",
+      "고양이보고싶",
+      "고양이"
+    ]
+  },
+  {
+    "id": "136",
     "title": "The Star",
     "emoji": "🌌",
     "hue": 265,
@@ -1523,8 +2179,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "096",
-    "title": "Judgement",
+    "id": "137",
+    "title": "Justice",
     "emoji": "🌌",
     "hue": 272,
     "group": "mystic",
@@ -1539,8 +2195,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "097",
-    "title": "The World",
+    "id": "138",
+    "title": "The Hanged Man",
     "emoji": "🌌",
     "hue": 279,
     "group": "mystic",
@@ -1555,8 +2211,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "098",
-    "title": "Ace of Cups",
+    "id": "139",
+    "title": "Death",
     "emoji": "🌌",
     "hue": 286,
     "group": "mystic",
@@ -1571,8 +2227,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "099",
-    "title": "Ace of Wands",
+    "id": "140",
+    "title": "Temperance",
     "emoji": "🌌",
     "hue": 293,
     "group": "mystic",
@@ -1587,8 +2243,8 @@ window.DEX = [
     ]
   },
   {
-    "id": "100",
-    "title": "Ace of Swords",
+    "id": "141",
+    "title": "The Devil",
     "emoji": "🌌",
     "hue": 300,
     "group": "mystic",
@@ -1600,6 +2256,54 @@ window.DEX = [
       "영혼",
       "우주",
       "점성술"
+    ]
+  },
+  {
+    "id": "142",
+    "title": "The Tower",
+    "emoji": "🌌",
+    "hue": 307,
+    "group": "mystic",
+    "special": false,
+    "keywords": [
+      "천사",
+      "별자리",
+      "영혼",
+      "우주",
+      "점성술",
+      "타로"
+    ]
+  },
+  {
+    "id": "143",
+    "title": "The Star",
+    "emoji": "🌌",
+    "hue": 314,
+    "group": "mystic",
+    "special": false,
+    "keywords": [
+      "별자리",
+      "영혼",
+      "우주",
+      "점성술",
+      "타로",
+      "예언"
+    ]
+  },
+  {
+    "id": "144",
+    "title": "The Moon",
+    "emoji": "🌌",
+    "hue": 321,
+    "group": "mystic",
+    "special": false,
+    "keywords": [
+      "영혼",
+      "우주",
+      "점성술",
+      "타로",
+      "예언",
+      "환생"
     ]
   }
 ];
