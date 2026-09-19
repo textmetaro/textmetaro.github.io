@@ -46,8 +46,9 @@
     Object.keys(screens).forEach(function (k) {
       screens[k].classList.toggle("active", k === name);
     });
-    // navy only on the splash; chat/dex are white so the top/bottom stay white
-    setTheme(name === "splash" ? "#0d0831" : "#ffffff");
+    // keep the browser bars white everywhere (in-app browsers read theme-color
+    // only once at load and won't switch, so a per-screen navy would stick)
+    setTheme("#ffffff");
   }
 
   // ---- splash starfield ----
@@ -318,10 +319,26 @@
       state.messages[state.messages.length - 1].first = isNew;
       save();
       appendMessage(state.messages[state.messages.length - 1]);
-      Sound.receive();
-      if (isNew) {
-        toast("도감에 새 사진이 추가됐어요! 📖");
-        maybeComplete();
+
+      // fire the "띵" sound exactly when the photo actually appears (not before),
+      // then the toast right after — so it doesn't feel out of order.
+      var lastRow = messagesEl.lastElementChild;
+      var img = lastRow && lastRow.querySelector(".bubble.img img");
+      var done = false;
+      function onShown() {
+        if (done) return; done = true;
+        Sound.receive();
+        if (isNew) {
+          setTimeout(function () { toast("도감에 새 사진이 추가됐어요! 📖"); }, 220);
+          maybeComplete();
+        }
+      }
+      if (img && !(img.complete && img.naturalWidth > 0)) {
+        img.addEventListener("load", onShown, { once: true });
+        img.addEventListener("error", onShown, { once: true });
+        setTimeout(onShown, 2500);   // safety net if load/error never fires
+      } else {
+        onShown();                    // already loaded (cached) → in sync
       }
     }, preDelay + typeDelay);
   }
@@ -609,9 +626,7 @@
     if (changed) save();
   })();
 
-  // navy status bar on the splash only (works on browsers with dynamic
-  // theme-color; others keep the white initial value → chat/dex stay white)
-  setTheme(screens.splash.classList.contains("active") ? "#0d0831" : "#ffffff");
+  setTheme("#ffffff");   // white bars everywhere (initial meta is white too)
 
   // If returning user already has messages, keep them; splash still shows first.
   renderAll();
