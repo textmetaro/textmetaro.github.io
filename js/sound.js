@@ -141,14 +141,16 @@
   function key(kind) {
     if (!enabled) return;
     kind = kind || "click";
-    if (!playBuffer("kb_" + kind, 0.9)) synthKey(kind);
+    // When custom sounds are configured, ONLY use the sample — never the synth
+    // fallback (which is the "old" sound the user heard before files loaded).
+    if (!playBuffer("kb_" + kind, 0.9) && !USE_CUSTOM) synthKey(kind);
     haptic(kind === "modifier" ? 10 : 7);
   }
   function tick() { key("click"); } // backward-compat
 
   function send() {
     if (!enabled) return;
-    if (!playBuffer("send", 1)) {
+    if (!playBuffer("send", 1) && !USE_CUSTOM) {
       blip({ type: "sine", f0: 480, f1: 1500, dur: 0.16, vol: 0.22 });
       blip({ type: "triangle", f0: 900, f1: 1700, dur: 0.14, vol: 0.08 });
     }
@@ -156,7 +158,7 @@
   }
   function receive() {
     if (!enabled) return;
-    if (!playBuffer("receive", 1)) {
+    if (!playBuffer("receive", 1) && !USE_CUSTOM) {
       blip({ type: "sine", f0: 1050, f1: 1050, dur: 0.14, vol: 0.16 });
       setTimeout(function () { blip({ type: "sine", f0: 1400, f1: 1400, dur: 0.2, vol: 0.14 }); }, 95);
     }

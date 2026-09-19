@@ -34,8 +34,9 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body {
-  margin: 0; padding: 0; height: 100%;
-  overscroll-behavior: none;
+  margin: 0; padding: 0;
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  overflow: hidden; overscroll-behavior: none;
   background: #ffffff;                  /* any gap (safe area / keyboard) is white */
 }
 body {
@@ -215,11 +216,17 @@ body {
 .bubble.in.yt.playing { width: 100%; max-width: 100%; }
 .bubble.in.yt .yt-stage { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; background: #000; }
 .bubble.in.yt .yt-stage iframe { position: absolute; inset: 0; width: 100% !important; height: 100% !important; border: 0; }
-/* tap-to-hide YouTube UI: veil covers the video EXCEPT the bottom control bar,
-   so tapping the video toggles clean mode while the pause/controls stay usable.
-   In clean mode the veil covers everything so the YT chrome auto-hides. */
-.bubble.in.yt .yt-veil { position: absolute; left: 0; right: 0; top: 0; bottom: 16%; z-index: 3; background: transparent; cursor: pointer; }
-.bubble.in.yt .yt-stage.clean .yt-veil { bottom: 0; }
+/* muted autoplay + tap to unmute: veil captures the tap to unmute, then is
+   removed so the native controls work. */
+.bubble.in.yt .yt-veil { position: absolute; inset: 0; z-index: 3; background: transparent; cursor: pointer; }
+.bubble.in.yt .yt-unmute {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 4;
+  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+  background: rgba(0,0,0,0.62); color: #fff; border: 0; cursor: pointer;
+  font-family: inherit; font-size: 12px; font-weight: 700; padding: 7px 13px; border-radius: 999px;
+  backdrop-filter: blur(3px); animation: pulseHint 1.8s ease-in-out infinite;
+}
+@keyframes pulseHint { 0%,100%{opacity:.82} 50%{opacity:1; transform:translateX(-50%) scale(1.04)} }
 /* vertical (Shorts): tall thumbnail & player, larger when playing */
 .bubble.in.yt.v { width: 200px; }
 .bubble.in.yt.v .yt-thumb { aspect-ratio: 9/16; }

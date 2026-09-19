@@ -143,44 +143,44 @@
     return ytApiPromise;
   }
 
-  // YouTube "lite embed": clean thumbnail; tap → large in-chat player with
-  // native controls + a best-effort 1080p request. A bigger player is what
-  // actually makes YouTube serve HD (quality can't be forced via URL params).
+  // YouTube: AUTOPLAY MUTED right away (muted autoplay is allowed on mobile
+  // without a gesture), then a tap unmutes with sound (a user gesture, so it's
+  // allowed). Loops so short fancams keep playing.
   function makeYouTube(videoId, vertical) {
     var wrap = document.createElement("div");
-    wrap.className = "bubble in yt" + (vertical ? " v" : "");
-    var thumb = document.createElement("div");
-    thumb.className = "yt-thumb";
-    // vertical (Shorts) → try the original-aspect thumb, else hqdefault
-    thumb.style.backgroundImage =
-      "url(https://i.ytimg.com/vi/" + videoId + (vertical ? "/oardefault.jpg" : "/hqdefault.jpg") + ")," +
-      "url(https://i.ytimg.com/vi/" + videoId + "/hqdefault.jpg)";
-    thumb.innerHTML = "<span class='yt-play'></span><span class='yt-badge'>▶ YouTube</span>";
-    wrap.appendChild(thumb);
+    wrap.className = "bubble in yt playing" + (vertical ? " v" : "");
+    var stage = document.createElement("div");
+    stage.className = "yt-stage";
 
-    wrap.addEventListener("click", function () {
-      wrap.classList.add("playing");
-      var stage = document.createElement("div");
-      stage.className = "yt-stage";
-      // Create the iframe SYNCHRONOUSLY inside the tap gesture — required for
-      // mobile (iOS/Android) to allow autoplay with sound. (The async IFrame API
-      // loses the gesture and won't start on phones.)
-      var f = document.createElement("iframe");
-      f.src = "https://www.youtube.com/embed/" + videoId +
-        "?autoplay=1&playsinline=1&rel=0&modestbranding=1";
-      f.setAttribute("frameborder", "0");
-      f.setAttribute("allowfullscreen", "");
-      f.allow = "autoplay; encrypted-media; picture-in-picture; web-share; fullscreen";
-      stage.appendChild(f);
-      // tap-to-hide-UI: veil over the video (not the bottom control bar)
-      var veil = document.createElement("div");
-      veil.className = "yt-veil";
-      veil.addEventListener("click", function () { stage.classList.toggle("clean"); });
-      stage.appendChild(veil);
-      wrap.innerHTML = "";
-      wrap.appendChild(stage);
-      scrollBottomIfPinned();
-    }, { once: true });
+    var base = "https://www.youtube.com/embed/" + videoId +
+      "?playsinline=1&rel=0&modestbranding=1&loop=1&playlist=" + videoId + "&autoplay=1";
+    var f = document.createElement("iframe");
+    f.src = base + "&mute=1";                 // muted autoplay (works on phones)
+    f.setAttribute("frameborder", "0");
+    f.setAttribute("allowfullscreen", "");
+    f.allow = "autoplay; encrypted-media; picture-in-picture; web-share; fullscreen";
+    stage.appendChild(f);
+
+    // "탭하여 소리 켜기" hint; tapping the video (or the hint) unmutes
+    var hint = document.createElement("button");
+    hint.type = "button"; hint.className = "yt-unmute";
+    hint.innerHTML = "<span>🔇</span> 탭하여 소리 켜기";
+    var muted = true;
+    var veil = document.createElement("div");
+    veil.className = "yt-veil";
+    function unmute() {
+      if (!muted) return;
+      muted = false;
+      stage.classList.add("unmuted");
+      f.src = base + "&mute=0";        // reload with sound (user gesture → allowed)
+      veil.remove(); hint.remove();    // hand control back to the native player
+    }
+    veil.addEventListener("click", unmute);
+    hint.addEventListener("click", function (e) { e.stopPropagation(); unmute(); });
+    stage.appendChild(veil);
+    stage.appendChild(hint);
+
+    wrap.appendChild(stage);
     return wrap;
   }
 
@@ -571,15 +571,18 @@
     var vv = window.visualViewport;
     var app = $("app");
     if (!vv || !app) return;
-    var lastH = 0;
+    var lastH = 0, lastTop = -1;
     function fit() {
       var h = Math.round(vv.height);
-      if (h === lastH) return;            // only when the height actually changes
-      lastH = h;
-      app.style.height = h + "px";        // header stays put (top:0); only the bottom shrinks
+      var top = Math.round(vv.offsetTop);   // stays 0 because body is fixed (can't scroll)
+      if (h === lastH && top === lastTop) return;
+      lastH = h; lastTop = top;
+      app.style.height = h + "px";          // header stays at the top; only the bottom shrinks
+      app.style.top = top + "px";
       if (screens.chat.classList.contains("active") && pinned) scrollBottom();
     }
-    vv.addEventListener("resize", fit);   // resize fires once per keyboard open/close (smooth)
+    vv.addEventListener("resize", fit);
+    vv.addEventListener("scroll", fit);
     fit();
   })();
 
