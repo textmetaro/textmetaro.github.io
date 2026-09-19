@@ -152,27 +152,30 @@
     var stage = document.createElement("div");
     stage.className = "yt-stage";
 
-    var base = "https://www.youtube.com/embed/" + videoId +
-      "?playsinline=1&rel=0&modestbranding=1&loop=1&playlist=" + videoId + "&autoplay=1";
     var f = document.createElement("iframe");
-    f.src = base + "&mute=1";                 // muted autoplay (works on phones)
+    f.src = "https://www.youtube.com/embed/" + videoId +
+      "?playsinline=1&rel=0&modestbranding=1&loop=1&playlist=" + videoId +
+      "&autoplay=1&mute=1&enablejsapi=1";      // muted autoplay (works on phones)
     f.setAttribute("frameborder", "0");
     f.setAttribute("allowfullscreen", "");
     f.allow = "autoplay; encrypted-media; picture-in-picture; web-share; fullscreen";
     stage.appendChild(f);
 
-    // "탭하여 소리 켜기" hint; tapping the video (or the hint) unmutes
+    // "탭하여 소리 켜기" hint; tapping unmutes WITHOUT reloading (keeps playing)
     var hint = document.createElement("button");
     hint.type = "button"; hint.className = "yt-unmute";
     hint.innerHTML = "<span>🔇</span> 탭하여 소리 켜기";
     var muted = true;
     var veil = document.createElement("div");
     veil.className = "yt-veil";
+    function cmd(func, args) {
+      try { f.contentWindow.postMessage(JSON.stringify({ event: "command", func: func, args: args || [] }), "*"); } catch (e) {}
+    }
     function unmute() {
       if (!muted) return;
       muted = false;
       stage.classList.add("unmuted");
-      f.src = base + "&mute=0";        // reload with sound (user gesture → allowed)
+      cmd("unMute"); cmd("setVolume", [100]); cmd("playVideo");  // no reload → no pause
       veil.remove(); hint.remove();    // hand control back to the native player
     }
     veil.addEventListener("click", unmute);
@@ -605,6 +608,10 @@
     });
     if (changed) save();
   })();
+
+  // navy status bar on the splash only (works on browsers with dynamic
+  // theme-color; others keep the white initial value → chat/dex stay white)
+  setTheme(screens.splash.classList.contains("active") ? "#0d0831" : "#ffffff");
 
   // If returning user already has messages, keep them; splash still shows first.
   renderAll();

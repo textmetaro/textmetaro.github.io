@@ -186,11 +186,9 @@ body {
 .bubble.img img { display: block; width: 230px; max-width: 100%; height: auto; border-radius: 18px; }
 .bubble.img .new-badge {
   position: absolute; top: 8px; left: 8px; z-index: 2; line-height: 0;
-  background: rgba(255,255,255,0.92); border-radius: 6px; padding: 3px 6px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.28);
   animation: newpop .4s cubic-bezier(.2,.9,.3,1.5) both;
 }
-.bubble.img .new-badge img { display: block; width: 34px; height: auto; }
+.bubble.img .new-badge img { display: block; width: 52px; height: auto; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.35)); }
 @keyframes newpop { 0% { opacity: 0; transform: scale(.3) rotate(-10deg); } 60% { transform: scale(1.1) rotate(3deg); } 100% { opacity: 1; transform: none; } }
 .bubble.in.yt { padding: 4px; background: var(--gray-bubble); border-radius: 18px; overflow: hidden; width: 250px; max-width: 78%; }
 .bubble.in.yt .yt-thumb {
