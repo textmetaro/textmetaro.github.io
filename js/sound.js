@@ -29,10 +29,32 @@
   function ac() {
     if (!ctx) {
       var AC = window.AudioContext || window.webkitAudioContext;
-      if (AC) ctx = new AC();
+      if (AC) { ctx = new AC(); bindKeepAlive(); }
     }
-    if (ctx && ctx.state === "suspended") ctx.resume();
+    // iOS parks the context in "suspended" (backgrounded) or "interrupted"
+    // (phone call / another app grabbed audio). Both need an explicit resume,
+    // or every sound silently no-ops until the user reloads.
+    if (ctx && ctx.state !== "running") { try { ctx.resume(); } catch (e) {} }
     return ctx;
+  }
+
+  // Keep the context alive: resume() is async, so the FIRST tap after the OS
+  // suspends us plays before resume lands (→ that one sound is dropped). We
+  // resume PROACTIVELY on every early interaction + when the tab returns, so
+  // the context is already running by the time a sound actually fires.
+  var keepAliveBound = false;
+  function bindKeepAlive() {
+    if (keepAliveBound || !ctx) return;
+    keepAliveBound = true;
+    var wake = function () { if (ctx && ctx.state !== "running") { try { ctx.resume(); } catch (e) {} } };
+    ["pointerdown", "touchstart", "keydown", "focusin"].forEach(function (ev) {
+      document.addEventListener(ev, wake, { capture: true, passive: true });
+    });
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden) wake();
+    });
+    // Safari fires statechange when it interrupts us — grab it back.
+    try { ctx.addEventListener("statechange", wake); } catch (e) {}
   }
 
   // normalize a config entry -> { src, offset, maxDur } | null
