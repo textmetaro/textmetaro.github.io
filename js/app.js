@@ -12,9 +12,9 @@
   var IMG_EXT = CONFIG.imageExt || "jpg";
 
   var INTRO_TEXT =
-    "1. 원하는 내용을 문자로 보내주세요.\n" +
+    "1. 생각나는 내용을 문자로 보내주세요.\n" +
     "2. 문자 내용에 따라서 다른 타로의 셀카를 받아요.\n" +
-    "3. 도감에서 144장을 모을 수 있어요! (다 모으라고 만든건 아니지만...🤔)";
+    "3. 도감에서 144장을 모을 수 있어요! (다 모으는 건 비추하지만...🤔)";
 
   var STORE_KEY = "textme.v1";
   var SHARE_URL = CONFIG.shareUrl || (location.origin + location.pathname); // deployed URL for X
