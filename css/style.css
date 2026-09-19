@@ -36,6 +36,7 @@
 html, body {
   margin: 0; padding: 0; height: 100%;
   overscroll-behavior: none;
+  background: #ffffff;                  /* any gap (safe area / keyboard) is white */
 }
 body {
   background: #ffffff;               /* gaps are white (matches the input field) */

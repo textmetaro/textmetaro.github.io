@@ -38,10 +38,16 @@
   var inputEl = $("input");
   var sendBtn = $("sendBtn");
 
+  function setTheme(color) {
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute("content", color);
+  }
   function show(name) {
     Object.keys(screens).forEach(function (k) {
       screens[k].classList.toggle("active", k === name);
     });
+    // navy only on the splash; chat/dex are white so the top/bottom stay white
+    setTheme(name === "splash" ? "#0d0831" : "#ffffff");
   }
 
   // ---- splash starfield ----
@@ -178,60 +184,70 @@
     return wrap;
   }
 
-  // ---- render messages ----
-  function render() {
-    messagesEl.innerHTML = "";
-    var lastTs = 0;
-    var prevSide = null;   // "out"|"in" of previous bubble, for iMessage-like grouping
-    state.messages.forEach(function (msg, i) {
-      if (i === 0 || msg.ts - lastTs > 3600000 || new Date(msg.ts).getDate() !== new Date(lastTs).getDate()) {
-        var sep = document.createElement("div");
-        sep.className = "date-sep";
-        sep.innerHTML = "<b>" + dayLabel(msg.ts) + "</b> <span class='time'>" + fmtTime(msg.ts) + "</span>";
-        messagesEl.appendChild(sep);
-        prevSide = null;   // fresh group after a date break
-      }
-      lastTs = msg.ts;
+  // ---- render messages (incremental — never rebuilds existing rows, so photos
+  // that already loaded stay put and don't flicker) ----
+  var _lastTs = 0, _prevSide = null, _firstRow = true;
 
-      var side = msg.kind === "user" ? "out" : "in";
-      var row = document.createElement("div");
-      row.className = "row " + side + (prevSide !== null && side !== prevSide ? " turn" : "");
-      prevSide = side;
-      if (msg.kind === "user") {
-        var b = document.createElement("div");
-        b.className = "bubble out";
-        b.textContent = msg.text;
-        row.appendChild(b);
-        messagesEl.appendChild(row);
-      } else if (msg.kind === "rtext") {
-        var tb = document.createElement("div");
-        tb.className = "bubble in" + (msg.intro ? " intro" : "");
-        tb.textContent = msg.text;
-        row.appendChild(tb);
-        messagesEl.appendChild(row);
-      } else if (msg.kind === "youtube") {
-        row.appendChild(makeYouTube(msg.videoId, msg.vertical));
-        messagesEl.appendChild(row);
-      } else {
-        var entry = byId[msg.imageId];
-        if (!entry) return; // stale id (e.g. dex resized) — skip safely
-        var wrap = document.createElement("div");
-        wrap.className = "bubble in img";
-        var rimg = makeImg(entry);
-        rimg.loading = "eager";   // reply photo must load even below the fold (else it never appears)
-        rimg.addEventListener("load", scrollBottomIfPinned);
-        wrap.appendChild(rimg);
-        if (msg.first) {                              // first-discovery → small NEW badge
-          var nb = document.createElement("span");
-          nb.className = "new-badge";
-          nb.innerHTML = "<img src='assets/new.png' alt='NEW'>";
-          wrap.appendChild(nb);
-        }
-        (function (en) { wrap.addEventListener("click", function () { openViewer(en); }); })(entry);
-        row.appendChild(wrap);
-        messagesEl.appendChild(row);
+  function buildRow(msg) {
+    var frag = document.createDocumentFragment();
+    if (_firstRow || msg.ts - _lastTs > 3600000 || new Date(msg.ts).getDate() !== new Date(_lastTs).getDate()) {
+      var sep = document.createElement("div");
+      sep.className = "date-sep";
+      sep.innerHTML = "<b>" + dayLabel(msg.ts) + "</b> <span class='time'>" + fmtTime(msg.ts) + "</span>";
+      frag.appendChild(sep);
+      _prevSide = null;
+    }
+    _firstRow = false;
+    _lastTs = msg.ts;
+
+    var side = msg.kind === "user" ? "out" : "in";
+    var row = document.createElement("div");
+    row.className = "row " + side + (_prevSide !== null && side !== _prevSide ? " turn" : "");
+    _prevSide = side;
+
+    if (msg.kind === "user") {
+      var b = document.createElement("div");
+      b.className = "bubble out";
+      b.textContent = msg.text;
+      row.appendChild(b);
+    } else if (msg.kind === "rtext") {
+      var tb = document.createElement("div");
+      tb.className = "bubble in" + (msg.intro ? " intro" : "");
+      tb.textContent = msg.text;
+      row.appendChild(tb);
+    } else if (msg.kind === "youtube") {
+      row.appendChild(makeYouTube(msg.videoId, msg.vertical));
+    } else {
+      var entry = byId[msg.imageId];
+      if (!entry) return frag; // stale id — skip the row
+      var wrap = document.createElement("div");
+      wrap.className = "bubble in img";
+      var rimg = makeImg(entry);
+      rimg.loading = "eager";
+      rimg.addEventListener("load", scrollBottomIfPinned);
+      wrap.appendChild(rimg);
+      if (msg.first) {
+        var nb = document.createElement("span");
+        nb.className = "new-badge";
+        nb.innerHTML = "<img src='assets/new.png' alt='NEW'>";
+        wrap.appendChild(nb);
       }
-    });
+      (function (en) { wrap.addEventListener("click", function () { openViewer(en); }); })(entry);
+      row.appendChild(wrap);
+    }
+    frag.appendChild(row);
+    return frag;
+  }
+
+  function appendMessage(msg) {
+    messagesEl.appendChild(buildRow(msg));
+    scrollBottomIfPinned();
+    updateBadge();
+  }
+  function renderAll() {
+    messagesEl.innerHTML = "";
+    _lastTs = 0; _prevSide = null; _firstRow = true;
+    state.messages.forEach(function (m) { messagesEl.appendChild(buildRow(m)); });
     scrollBottomIfPinned();
     updateBadge();
   }
@@ -262,7 +278,7 @@
     inputEl.value = "";
     inputEl.style.height = "auto";
     syncSend();
-    render();
+    appendMessage(state.messages[state.messages.length - 1]);
     save();
 
     // special multi-message reply (e.g. "text me") takes priority over photos
@@ -298,7 +314,7 @@
       // mark this reply as a first-discovery so the chat photo shows a NEW! badge
       state.messages[state.messages.length - 1].first = isNew;
       save();
-      render();
+      appendMessage(state.messages[state.messages.length - 1]);
       Sound.receive();
       if (isNew) {
         toast("도감에 새 사진이 추가됐어요! 📖");
@@ -344,7 +360,7 @@
           state.messages.push({ kind: "rtext", text: m.text, ts: Date.now() });
         }
         save();
-        render();
+        appendMessage(state.messages[state.messages.length - 1]);
         Sound.receive();
         setTimeout(step, 480);
       }, 700 + Math.random() * 450);
@@ -540,7 +556,7 @@
       state.flags.introShown = true;
       save();
     }
-    render();
+    renderAll();
     // no auto-focus — don't pop the keyboard on entry (avoids the layout jump)
   });
   $("openDex").addEventListener("click", openDex);
@@ -555,13 +571,15 @@
     var vv = window.visualViewport;
     var app = $("app");
     if (!vv || !app) return;
+    var lastH = 0;
     function fit() {
-      app.style.height = vv.height + "px";
-      app.style.transform = "translateX(-50%) translateY(" + vv.offsetTop + "px)";
+      var h = Math.round(vv.height);
+      if (h === lastH) return;            // only when the height actually changes
+      lastH = h;
+      app.style.height = h + "px";        // header stays put (top:0); only the bottom shrinks
       if (screens.chat.classList.contains("active") && pinned) scrollBottom();
     }
-    vv.addEventListener("resize", fit);
-    vv.addEventListener("scroll", fit);
+    vv.addEventListener("resize", fit);   // resize fires once per keyboard open/close (smooth)
     fit();
   })();
 
@@ -586,6 +604,6 @@
   })();
 
   // If returning user already has messages, keep them; splash still shows first.
-  render();
+  renderAll();
   updateBadge();
 })();
