@@ -38,26 +38,24 @@ html, body {
   overscroll-behavior: none;
 }
 body {
-  background: #05030f;               /* dark page behind the phone frame on desktop */
+  background: #ffffff;               /* gaps are white (matches the input field) */
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   user-select: none;
   overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
-  min-height: 100dvh;
 }
-/* The whole app is locked to the mainbg aspect ratio (414:896 = 9:19.5), fitted
-   inside the viewport. So the main image is never cropped and never letterboxed
-   on modern phones (which are ~this ratio); on desktop it's a centered phone. */
+/* Fill the device viewport (optimized to the phone's own resolution). The main
+   image covers the screen (person may crop — accepted trade-off). Height tracks
+   the visual viewport (JS) so the keyboard pushes only the composer up, not the
+   whole screen (iMessage-like). */
 #app {
-  width: min(100vw, calc(100dvh * 414 / 896), 430px);
-  aspect-ratio: 414 / 896;
-  position: relative;
+  position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+  width: min(100vw, 430px);
+  height: 100dvh;
   overflow: hidden;
   background: var(--bg);
-  box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.35);
 }
-@media (min-width: 460px) { #app { border-radius: 30px; } }
 
 .screen { position: absolute; inset: 0; display: none; flex-direction: column; }
 .screen.active { display: flex; }
@@ -69,12 +67,12 @@ body {
 }
 /* Fill the screen with the mainbg — no letterbox bars (use the image as-is). */
 #splash .main-wrap { position: absolute; inset: 0; }
-#splash .main-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+#splash .main-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 /* START button: centered, width 75.8%, bottom edge 8.8% up, 314:70 — from main.png.
    Neon blue glow around the pill (drop-shadow hugs the pill shape). */
 #splash .start-btn {
   position: absolute; left: 50%; transform: translateX(-50%);
-  bottom: 8.8%; width: 75.8%; max-width: 340px; aspect-ratio: 314 / 70;
+  bottom: 6.5%; width: 72%; max-width: 330px; aspect-ratio: 314 / 70;
   border: 0; cursor: pointer; padding: 0; font-size: 0;
   background: url("../assets/button1.png") center / 100% 100% no-repeat;
   filter: drop-shadow(0 0 7px rgba(64,120,255,0.75)) drop-shadow(0 0 16px rgba(64,120,255,0.45));
@@ -94,7 +92,7 @@ body {
   color: rgba(255, 255, 255, 0.45);
 }
 #splash .credit { right: 14px; bottom: calc(2.6% + var(--safe-b)); }
-.dex-credit { right: 16px; bottom: calc(9px + var(--safe-b)); }
+.dex-credit { right: 16px; bottom: calc(9px + var(--safe-b)); color: rgba(0,0,0,0.35); }
 
 /* completion: just confetti + this text, no popup card */
 #congrats {
@@ -134,6 +132,7 @@ body {
 /* ------------------------------------------------------ Chat */
 #chat { background: var(--bg); }
 .nav {
+  flex: 0 0 auto;                      /* fixed header — never scrolls/shrinks */
   padding-top: calc(var(--safe-t) + 8px);
   padding-bottom: 8px;
   display: grid; grid-template-columns: 44px 1fr 44px; align-items: center;
@@ -164,7 +163,7 @@ body {
 }
 .nav .dex-badge[hidden] { display: none; }  /* class rule overrode [hidden]'s default */
 
-.messages { flex: 1; overflow-y: auto; padding: 10px 12px 6px; -webkit-overflow-scrolling: touch; }
+.messages { flex: 1; min-height: 0; overflow-y: auto; padding: 10px 12px 6px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
 .date-sep { text-align: center; font-size: 11px; color: var(--gray-text); font-weight: 600; margin: 14px 0 8px; }
 .date-sep .time { font-weight: 400; }
 
@@ -237,6 +236,7 @@ body {
 @keyframes tb { 0%,60%,100%{transform:translateY(0);opacity:.5} 30%{transform:translateY(-4px);opacity:1} }
 
 .composer {
+  flex: 0 0 auto;                     /* fixed above the keyboard */
   display: flex; align-items: flex-end; gap: 8px; padding: 8px 10px;
   padding-bottom: calc(8px + var(--safe-b));
   border-top: 0.5px solid var(--hairline);
@@ -290,18 +290,18 @@ body {
 /* ------------------------------------------------------ Dex */
 #dex {
   position: absolute; inset: 0; z-index: 40; display: none; flex-direction: column;
-  background: radial-gradient(150% 90% at 50% 0%, var(--navy-3), var(--navy) 68%);
-  color: #fff;
+  background: #ffffff;
+  color: #111;
 }
 #dex.active { display: flex; }
 .dex-nav {
   padding-top: calc(var(--safe-t) + 10px); padding-bottom: 12px; padding-left: 16px; padding-right: 16px;
   display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
 }
-.dex-nav .title { font-size: 18px; font-weight: 800; }
-.dex-nav .title small { display: block; font-size: 12px; font-weight: 500; color: var(--ink-soft); margin-top: 2px; }
-.dex-nav button { background: none; border: 0; color: var(--blue-accent); font-size: 16px; font-weight: 600; cursor: pointer; }
+.dex-nav .title { font-size: 18px; font-weight: 800; color: #111; }
+.dex-nav .title small { display: block; font-size: 12px; font-weight: 500; color: #8a8f9c; margin-top: 2px; }
+.dex-nav button { background: none; border: 0; color: var(--imsg-blue); font-size: 16px; font-weight: 600; cursor: pointer; }
 .dex-nav-right { display: flex; align-items: center; gap: 12px; }
 .dex-nav .dex-share {
   background: linear-gradient(180deg, #5b86ff, #3a6bff); color: #fff;
@@ -312,9 +312,9 @@ body {
 .dex-nav .dex-share::before { content: "𝕏"; font-weight: 800; }
 .dex-nav .dex-share:active { transform: scale(0.96); }
 .dex-progress { padding: 12px 16px 4px; }
-.dex-progress .bar { height: 8px; border-radius: 999px; background: rgba(255,255,255,0.12); overflow: hidden; }
+.dex-progress .bar { height: 8px; border-radius: 999px; background: rgba(0,0,0,0.08); overflow: hidden; }
 .dex-progress .fill { height: 100%; background: linear-gradient(90deg, #4f7bff, #a879ff); border-radius: 999px; transition: width .5s ease; }
-.dex-progress .label { font-size: 12px; color: var(--ink-soft); margin-top: 6px; display: flex; justify-content: space-between; }
+.dex-progress .label { font-size: 12px; color: #8a8f9c; margin-top: 6px; display: flex; justify-content: space-between; }
 
 .dex-grid {
   flex: 1; overflow-y: auto; display: grid;
@@ -322,21 +322,21 @@ body {
   /* fixed 2:3 row height derived from column width (JS refines this at runtime) */
   grid-auto-rows: calc((min(100vw, 430px) - 48px) / 3 * 1.5);
   gap: 8px; padding: 12px 16px calc(24px + var(--safe-b));
-  scrollbar-width: thin;                       /* Firefox: subtle, mood-matching */
-  scrollbar-color: rgba(255,255,255,0.16) transparent;
+  scrollbar-width: thin;                       /* Firefox: subtle */
+  scrollbar-color: rgba(0,0,0,0.16) transparent;
 }
 .dex-grid::-webkit-scrollbar { width: 5px; }
 .dex-grid::-webkit-scrollbar-track { background: transparent; }
-.dex-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.14); border-radius: 999px; }
-.dex-grid::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.26); }
+.dex-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.14); border-radius: 999px; }
+.dex-grid::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.26); }
 .cell {
   border-radius: 12px; overflow: hidden; position: relative;
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  background: #f0f1f4; border: 1px solid rgba(0,0,0,0.06);
 }
 .cell > * { position: absolute; }
-.cell.locked .q { inset: 0; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.25); font-size: 22px; }
-.cell.locked .num { top: 6px; left: 8px; font-size: 10px; color: rgba(255,255,255,0.3); }
-.cell.unlocked { cursor: pointer; border-color: rgba(111,140,255,0.4); }
+.cell.locked .q { inset: 0; display: flex; align-items: center; justify-content: center; color: rgba(0,0,0,0.18); font-size: 22px; }
+.cell.locked .num { top: 6px; left: 8px; font-size: 10px; color: rgba(0,0,0,0.25); }
+.cell.unlocked { cursor: pointer; border-color: rgba(111,140,255,0.35); }
 .cell.unlocked img { inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .cell .kw {
   left: 0; right: 0; bottom: 0; padding: 12px 6px 5px;

@@ -152,24 +152,21 @@
     thumb.innerHTML = "<span class='yt-play'></span><span class='yt-badge'>▶ YouTube</span>";
     wrap.appendChild(thumb);
 
-    function plainFallback(stage) {
-      var f = document.createElement("iframe");
-      f.src = "https://www.youtube.com/embed/" + videoId +
-        "?autoplay=1&playsinline=1&rel=0&vq=hd1080&hd=1";
-      f.setAttribute("frameborder", "0");
-      f.allow = "autoplay; encrypted-media; picture-in-picture; web-share; fullscreen";
-      f.allowFullscreen = true;
-      stage.appendChild(f);
-    }
-
     wrap.addEventListener("click", function () {
-      wrap.classList.add("playing");           // expand to full chat width → HD
+      wrap.classList.add("playing");
       var stage = document.createElement("div");
       stage.className = "yt-stage";
-      var mount = document.createElement("div");
-      stage.appendChild(mount);
-      // tap-to-hide-UI: a veil over the video (but NOT the bottom control bar).
-      // Start with UI shown; tapping the video area toggles the clean (UI-hidden) mode.
+      // Create the iframe SYNCHRONOUSLY inside the tap gesture — required for
+      // mobile (iOS/Android) to allow autoplay with sound. (The async IFrame API
+      // loses the gesture and won't start on phones.)
+      var f = document.createElement("iframe");
+      f.src = "https://www.youtube.com/embed/" + videoId +
+        "?autoplay=1&playsinline=1&rel=0&modestbranding=1";
+      f.setAttribute("frameborder", "0");
+      f.setAttribute("allowfullscreen", "");
+      f.allow = "autoplay; encrypted-media; picture-in-picture; web-share; fullscreen";
+      stage.appendChild(f);
+      // tap-to-hide-UI: veil over the video (not the bottom control bar)
       var veil = document.createElement("div");
       veil.className = "yt-veil";
       veil.addEventListener("click", function () { stage.classList.toggle("clean"); });
@@ -177,18 +174,6 @@
       wrap.innerHTML = "";
       wrap.appendChild(stage);
       scrollBottomIfPinned();
-
-      loadYT().then(function (YT) {
-        var forceHD = function (p) { try { p.setPlaybackQuality("hd1080"); } catch (e) {} };
-        new YT.Player(mount, {
-          width: "100%", height: "100%", videoId: videoId,
-          playerVars: { autoplay: 1, playsinline: 1, rel: 0, modestbranding: 1 },
-          events: {
-            onReady: function (e) { forceHD(e.target); try { e.target.playVideo(); } catch (x) {} },
-            onPlaybackQualityChange: function (e) { forceHD(e.target); },
-          },
-        });
-      }).catch(function () { plainFallback(stage); });
     }, { once: true });
     return wrap;
   }
@@ -233,7 +218,8 @@
         var wrap = document.createElement("div");
         wrap.className = "bubble in img";
         var rimg = makeImg(entry);
-        rimg.addEventListener("load", scrollBottomIfPinned); // pin to newest only if already near bottom
+        rimg.loading = "eager";   // reply photo must load even below the fold (else it never appears)
+        rimg.addEventListener("load", scrollBottomIfPinned);
         wrap.appendChild(rimg);
         if (msg.first) {                              // first-discovery → small NEW badge
           var nb = document.createElement("span");
@@ -555,13 +541,29 @@
       save();
     }
     render();
-    inputEl.focus();
+    // no auto-focus — don't pop the keyboard on entry (avoids the layout jump)
   });
   $("openDex").addEventListener("click", openDex);
   $("closeDex").addEventListener("click", closeDex);
   $("dexShare").addEventListener("click", shareDex);
   $("viewerClose").addEventListener("click", closeViewer);
   overlay.addEventListener("click", function (e) { if (e.target === overlay) closeOverlay(); });
+
+  // ---- keyboard: keep the app fitted to the VISUAL viewport so the header
+  // stays put and only the composer rides up with the keyboard (iMessage-like) ----
+  (function keyboardFit() {
+    var vv = window.visualViewport;
+    var app = $("app");
+    if (!vv || !app) return;
+    function fit() {
+      app.style.height = vv.height + "px";
+      app.style.transform = "translateX(-50%) translateY(" + vv.offsetTop + "px)";
+      if (screens.chat.classList.contains("active") && pinned) scrollBottom();
+    }
+    vv.addEventListener("resize", fit);
+    vv.addEventListener("scroll", fit);
+    fit();
+  })();
 
   // ---- contact profile photo (nav avatar) ----
   (function setAvatar() {
