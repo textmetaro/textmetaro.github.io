@@ -591,19 +591,38 @@
     var vv = window.visualViewport;
     var app = $("app");
     if (!vv || !app) return;
-    var lastH = 0, lastTop = -1;
-    function fit() {
+    var lastH = -1, raf = 0;
+
+    function apply() {
+      raf = 0;
       var h = Math.round(vv.height);
-      var top = Math.round(vv.offsetTop);   // stays 0 because body is fixed (can't scroll)
-      if (h === lastH && top === lastTop) return;
-      lastH = h; lastTop = top;
-      app.style.height = h + "px";          // header stays at the top; only the bottom shrinks
-      app.style.top = top + "px";
+      if (h !== lastH) {
+        lastH = h;
+        app.style.height = h + "px";        // header stays put; only the bottom shrinks with the keyboard
+      }
+      // The body is position:fixed, so the app must stay glued to the top of the
+      // screen. While opening the keyboard, iOS briefly reports a non-zero
+      // offsetTop as it tries to scroll the focused field into view — FOLLOWING
+      // that is exactly the "whole screen jumps up then drops back" glitch. So we
+      // hard-pin top to 0 and only ride the height down.
+      if (app.style.top !== "0px") app.style.top = "0px";
+      if (window.pageYOffset) window.scrollTo(0, 0);   // undo any stray document scroll
       if (screens.chat.classList.contains("active") && pinned) scrollBottom();
     }
-    vv.addEventListener("resize", fit);
-    vv.addEventListener("scroll", fit);
-    fit();
+    // Coalesce the burst of resize+scroll events fired during the keyboard
+    // animation into a single layout write per frame (kills the stutter).
+    function schedule() { if (!raf) raf = requestAnimationFrame(apply); }
+
+    vv.addEventListener("resize", schedule);
+    vv.addEventListener("scroll", schedule);
+    // Squash iOS's pre-keyboard scroll-into-view the instant the field is focused.
+    if (typeof inputEl !== "undefined" && inputEl) {
+      inputEl.addEventListener("focus", function () {
+        window.scrollTo(0, 0);
+        schedule();
+      });
+    }
+    apply();
   })();
 
   // ---- contact profile photo (nav avatar) ----
